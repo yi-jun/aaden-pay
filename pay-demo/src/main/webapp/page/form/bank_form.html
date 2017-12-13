@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>title</title> <#include "/includes/public.html" />
+<link href="${pay.getContextPath()}/lib/icheck/icheck.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div class="pd-15" style="width: 800px;margin: 0 auto;">
+		<form class="form form-horizontal" id="myForm">
+			
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>姓名：</label>
+				<div class="formControls col-6">
+					<input type="text" value="郑秋冬" id="realName" class="input-text" name="realName" placeholder="" datatype="*1-99" nullmsg="姓名不能为空！">
+				</div>
+				<div class="col-3"></div>
+			</div>
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>身份证：</label>
+				<div class="formControls col-6">
+					<input type="text" value="371321199005011256" id="idNo" class="input-text" name="idNo" placeholder="" datatype="*18-18" nullmsg="身份证不能为空！">
+				</div>
+				<div class="col-3"></div>
+			</div>
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>卡号：</label>
+				<div class="formControls col-6">
+					<input type="text" value="6222080905000950649" id="cardNo" class="input-text" name="cardNo" placeholder="" datatype="*15-25" nullmsg="卡号不能为空！">
+				</div>
+				<div class="col-3"></div>
+			</div>
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>预留手机：</label>
+				<div class="formControls col-6">
+					<input type="text" value="18588888888" id="mobile" class="input-text" name="mobile" placeholder="" datatype="n11-11" nullmsg="预留手机不能为空！">
+				</div>
+				<div class="col-3"></div>
+			</div>
+			
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red"></span>银行类型：</label>
+				   <div class="formControls col-6">
+			         	<select class="select" id="bankType" name="bankType" >
+			         		   <option value="">请选择(选填项)</option>
+			         		   <#list bankTypes as item>
+			     		 	   	<option value="${item}">${item.cnName}</option>
+			     		 	   </#list>
+				        </select>
+		       		 </span>
+		       		 
+			      </div>
+				<div class="col-3"></div>
+			</div>
+			
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>验证码：</label>
+				<div class="formControls col-6">
+					<input type="text" value="999966" id="validCode" class="input-text" name="validCode" placeholder="" datatype="n4-6" nullmsg="验证码不能为空！" style="width: 293px;">
+					<a  onclick="submitApply()" href="javascript:;" style="margin-left: 20px;color: red;"> 获取验证码</a>
+				</div>
+				<div class="col-3"></div>
+			</div>			
+			
+
+			<div class="row cl">
+				<div class="col-10 col-offset-5">
+					<input class="btn btn-primary radius" type="button" onclick="submitConfirm()" id="checkButton" value="提交绑卡" >
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<script type="text/javascript" src="${pay.getContextPath()}/lib/jquery.form.min.js"></script>
+	<script type="text/javascript" src="${pay.getContextPath()}/lib/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript">
+	/**
+	 * 初始化内容
+	 */
+	$(function(){
+		initEvent();
+	});
+	
+	
+	/**
+	 * 初始化事件
+	 */
+	function initEvent(){
+		// 初始化添加验证
+		$("#myForm").Validform({
+			tiptype:2,
+			ajaxPost:true,
+			beforeSubmit:function(){  
+				return false;
+	        } 
+		});
+	}
+	/**
+	 * 获取验证码
+	 */
+	function submitApply(){
+		var options = {
+				url:  '${pay.getContextPath()}/bank/apply',
+				type: 'post',
+				dataType : 'json',
+				cache: false,
+				async: false,
+				success: function (data) {
+					if (data.success!=undefined&&!data.success) {
+						layer.msg("操作失败:"+data.msg);
+					}else{
+						layer.msg("验证码已发送");
+					}
+				}
+		};
+		$("#myForm").ajaxSubmit(options);
+		return false;
+	}
+	
+	
+	/**
+	 * 开始绑卡
+	 */
+	function submitConfirm(){
+		var url=  '${pay.getContextPath()}/bank/confirm';
+		var param = {"validCode":$("#validCode").val()};
+		$.post(url,param,function(data){
+			if (data.success!=undefined&&!data.success) {
+				layer.msg("绑卡失败:"+data.msg);
+			}else{
+				layer.msg("绑卡成功");
+			}
+		});
+		return false;
+	}		
+	</script>
+</body>
+</html>

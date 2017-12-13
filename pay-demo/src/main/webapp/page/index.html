@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<#include "/includes/public.html" />
+<title>demo</title>
+</head>
+
+<header class="Hui-header cl"> 
+	<ul class="Hui-userbar l" style="position: relative;padding-left: 30px;">
+		<li style="padding-left: 30px;"> 演示demo</li>
+	</ul>
+</header>
+
+<body>
+<aside class="Hui-aside">
+	<div class="menu_dropdown bk_2">
+		<dd style="display: block;">
+		        <ul>
+	        		  <li><a href="${pay.getContextPath()}/bank/form" target="showFframe" >绑卡</a></li>
+	        		  <li><a href="${pay.getContextPath()}/recharge/form" target="showFframe" >快捷支付</a></li>
+	        		  <li><a href="${pay.getContextPath()}/gateway/form" target="showFframe" >网银支付</a></li>
+	        		  <li><a href="${pay.getContextPath()}/cash/form" target="showFframe" >提现</a></li>
+	        		  
+	        		  	<li><a  style="line-height: 10px;">&nbsp;</a></li>
+	        		  
+	        		   <li><a href="${pay.getContextPath()}/query/pay/list" target="showFframe" >支付日志</a></li>
+	        		   <li><a href="${pay.getContextPath()}/query/validcode/list" target="showFframe" >充值验证码日志</a></li>
+	        		   <li><a href="${pay.getContextPath()}/query/bank/list" target="showFframe" >绑卡签约日志</a></li>
+		        </ul>
+		</dd>
+	</div>
+</aside>
+<div class="dislpayArrow"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+<section class="Hui-article-box">
+  <div id="iframe_box" class="Hui-article">
+    <div class="show_iframe">
+      <div style="display:none" class="loading"></div>
+      <iframe scrolling="yes" frameborder="0" src="${pay.getContextPath()}/readme" name="showFframe"></iframe>
+    </div>
+  </div>
+</section>
+<p></p>
+</div>
+</body>
+</html>

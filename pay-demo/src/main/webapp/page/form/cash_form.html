@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>title</title> <#include "/includes/public.html" />
+<link href="${pay.getContextPath()}/lib/icheck/icheck.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="${pay.getContextPath()}/lib/autocompleter/autocompleter.css?${.now?string('ddHHmmss')}" />
+</head>
+<body>
+	<div class="pd-15" style="width: 800px;margin: 0 auto;">
+		<p style="color: red;text-align: center;" > <#if !(bank ??) >数据库未找到签约成功的银行卡 </#if></p>
+		
+		<form class="form form-horizontal" id="myForm">
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>银行卡信息：</label>
+				<div class="formControls col-6">
+					<span>${(bank.realName!'')} | ${(bank.cardNo!'')}</span>
+					<input type="hidden" id="bankType" value="${(bank.bankType!'')}" >
+				</div> 
+				<div class="col-3"></div>
+			</div>		
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>提现金额：</label>
+				<div class="formControls col-6">
+					<input type="text" value="100" id="amount" class="input-text" name="amount" placeholder="" datatype="*1-18" nullmsg="提现金额不能为空！">
+				</div>
+				<div class="col-3"></div>
+			</div>
+			
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>开户省份：</label>
+				<div class="formControls col-6">
+			         	<select class="select" id="bankProv" name="bankProv" >
+			         		   <option value="">---请选择---</option>
+			         		   <#list provs as item>
+			     		 	   	<option value="${item.areaCode}">${item.areaName}</option>
+			     		 	   </#list>
+				        </select>
+				</div>
+				<div class="col-3"></div>
+			</div>
+			
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>开户城市：</label>
+				<div class="formControls col-6">
+			         	<select class="select" id="bankCity" name="bankCity" >
+			         		   <option value="">---请选择---</option>
+				        </select>
+				</div>
+				<div class="col-3"></div>
+			</div>			
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>支行名称：</label>
+				<div class="formControls col-6">
+					<input type="text" value="" id="branchName" class="input-text" name="branchName" placeholder="" datatype="*1-28" nullmsg="支行名称不能为空！">
+				</div>
+				<div class="col-3"></div>
+			</div>			
+
+			<div class="row cl">
+				<div class="col-10 col-offset-5">
+					<input class="btn btn-primary radius" type="button" onclick="rechargeSubmit()" id="checkButton" value="提交提现" >
+				</div>
+			</div>
+		</form>
+	</div>
+	
+	<div style="display: none;">
+		<form class="mt-10 clearfix" action="" target="_blank" method="post" id="submit_form"></form>
+	</div>
+
+	<script type="text/javascript" src="${pay.getContextPath()}/lib/jquery.form.min.js"></script>
+	<script type="text/javascript" src="${pay.getContextPath()}/lib/autocompleter/jquery.autocompleter.js"></script>
+	<script type="text/javascript" src="${pay.getContextPath()}/lib/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript">
+	
+	var _resource=[];
+	
+	/**
+	 * 初始化内容
+	 */
+	$(function(){
+		initEvent();
+	});
+	
+	
+	/**
+	 * 初始化事件
+	 */
+	function initEvent(){
+		// 初始化添加验证
+		$("#myForm").Validform({
+			tiptype:2,
+			ajaxPost:true,
+			beforeSubmit:function(){
+				return false;
+	        } 
+		});
+		
+		
+		
+		// 城市事件
+		$('#bankCity').change(function(){
+			var node = $("#bankCity option:selected");
+			var _val = node.val();
+		    if(_val != ""){
+		   		$('#bankCity').val(node.val());
+		    }
+		    queryBranchData();
+		});	
+		
+		// 省份事件
+		$('#bankProv').change(function(){
+			var node = $("#bankProv option:selected");
+			var _val = node.val();
+			 $("#bankProv").val(node.val());
+		    var _city=$('#bankCity');
+		    _city.empty();
+		    var html=[];
+		    html.push('<option value="" >---请选择---</option>');
+		    if(_val){
+		        $.ajax({
+		            url:'${pay.getContextPath()}/cash/cityList',
+		            type:'post',
+		            dataType:'json',
+		            data:{areaCode:_val},
+		            cache:false,
+		            success:function(data){
+		                $.each(data,function(i,obj){
+		                    if(obj.areaCode==bankCity){
+		                        html.push('<option value="',obj.areaCode,'" selected="selected" >',obj.areaName,'</option>');
+		                    }else{
+		                        html.push('<option value="',obj.areaCode,'">',obj.areaName,'</option>');
+		                    }
+		                });
+		                _city.append(html.join(''));
+		                $("#bankCity").trigger("change");
+		            }
+		        });
+		    }else{
+		        _city.append(html.join(''));
+		    }
+		});
+	}
+	
+	
+	/**
+	 * 提交提现
+	 */
+	function rechargeSubmit(){
+		var url=  '${pay.getContextPath()}/cash/submit';
+		var param = {"amount":$("#amount").val(),"bankProv":$("#bankProv").val() ,"bankCity":$("#bankCity").val(),"branchName":$("#branchName").val()};
+		$.post(url,param,function(data){
+			if (data.successed) {
+				layer.msg("提现成功");
+			}else if (data.notSure) {
+				layer.msg("提现处理中,稍后查询");
+			}else{
+				layer.msg("提现失败:"+data.msg);
+			}
+		});
+		return false;
+	}		
+	
+	
+
+	// 刷新支行信息
+	function queryBranchData(){
+		
+	    var cityCode = $("#bankCity").val();
+	    var bankType = $("#bankType").val();
+	    if(bankType==""||typeof(bankType)=="undefined"){
+	        _resource=[{label:"请选择银行",value:"请选择银行"}];
+	        autoComple();
+	        return;
+	    }
+	    if(cityCode==""||typeof(cityCode)=="undefined"){
+	        _resource=[{label:"请选择城市",value:"请选择城市"}];
+	        autoComple();
+	        return;
+	    }
+	    var _url='${pay.getContextPath()}/cash/branchList';
+
+	    var keyWord = "";
+	     $.ajax({
+	        url:_url,
+	        type:'post',
+	        dataType:'json',
+	        data:{"bankType":bankType,"keyWord":keyWord,"cityCode":cityCode},
+	        async: false,//避免被浏览器拦截
+	        success:function(data){
+	            _resource= data;
+	            autoComple();
+	            return;
+	        }
+	    });
+	}
+
+	//自动完成
+	function autoComple(){
+	    $('#branchName').autocompleter('destroy');
+	    $('#branchName').autocompleter({
+	         highlightMatches: true,
+	         source:_resource,
+	         template:false,
+	         hint: false,
+	        empty:true,
+	        matchContains:true,
+	        callback: function (value, index, selected){
+	            $('#branchName').focus();
+	        }
+	    });
+	}
+
+	</script>
+</body>
+</html>

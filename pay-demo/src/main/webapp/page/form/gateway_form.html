@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>title</title> <#include "/includes/public.html" />
+<link href="${pay.getContextPath()}/lib/icheck/icheck.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div class="pd-15" style="width: 800px;margin: 0 auto;">
+		<form class="form form-horizontal" id="myForm">
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red"></span>银行类型：</label>
+				   <div class="formControls col-6">
+			         	<select class="select" id="bankType" name="bankType" >
+			         		   <#list bankTypes as item>
+			     		 	   	<option value="${item}">${item.cnName}</option>
+			     		 	   </#list>
+				        </select>
+		       		 </span>
+		       		 
+			      </div>
+				<div class="col-3"></div>
+			</div>
+			
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>充值金额：</label>
+				<div class="formControls col-6">
+					<input type="text" value="100" id="amount" class="input-text" name="amount" placeholder="" datatype="*1-18" nullmsg="充值金额不能为空！">
+				</div>
+				<div class="col-3"></div>
+			</div>
+			
+
+			<div class="row cl">
+				<div class="col-10 col-offset-5">
+					<input class="btn btn-primary radius" type="button" onclick="rechargeSubmit()" id="checkButton" value="提交充值" >
+				</div>
+			</div>
+		</form>
+	</div>
+	
+	<div style="display: none;">
+		<form class="mt-10 clearfix" action="" target="_blank" method="post" id="submit_form"></form>
+	</div>
+
+	<script type="text/javascript" src="${pay.getContextPath()}/lib/jquery.form.min.js"></script>
+	<script type="text/javascript" src="${pay.getContextPath()}/lib/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript">
+	/**
+	 * 初始化内容
+	 */
+	$(function(){
+		initEvent();
+	});
+	
+	
+	/**
+	 * 初始化事件
+	 */
+	function initEvent(){
+		// 初始化添加验证
+		$("#myForm").Validform({
+			tiptype:2,
+			ajaxPost:true,
+			beforeSubmit:function(){
+				return false;
+	        } 
+		});
+	}
+	
+	
+	/**
+	 * 充值
+	 */
+	function rechargeSubmit(){
+		var url=  '${pay.getContextPath()}/gateway/submit';
+		var param = {"bankType":$("#bankType").val(),"amount":$("#amount").val() };
+		$.post(url,param,function(data){
+			if (data.successed) {
+				$("#submit_form").attr("action",data.postUrl);
+				var html = '';
+				$.each(data.postMap,function(name,value) {
+					html=html+'<input type="hidden" name=\''+name+'\' value=\''+value+'\' />';
+				});
+				$("#submit_form").html(html);
+				$("#submit_form").submit();
+			}else if (data.notSure) {
+				layer.msg("充值处理中,稍后查询");
+			}else{
+				layer.msg("充值失败:"+data.msg);
+			}
+		});
+		return false;
+	}		
+	</script>
+</body>
+</html>

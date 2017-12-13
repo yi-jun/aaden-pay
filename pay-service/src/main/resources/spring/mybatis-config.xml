@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+		PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="lazyLoadingEnabled" value="false" />
+	</settings>
+	<plugins>
+		<!-- 指定数据库分页方言Dialect -->
+		<plugin interceptor="com.aaden.pay.core.orm.mybatis.PagePluging">
+			<property name="dialectClass" value="com.aaden.pay.core.orm.MySQLDialect" />
+		</plugin>
+	</plugins>
+	<mappers>
+		<mapper resource="mapper/thirdpay/ThirdBankSendMapper.xml" />
+		<mapper resource="mapper/thirdpay/ThirdPayRecordMapper.xml" />
+		<mapper resource="mapper/thirdpay/ThirdPayQuotaMapper.xml" />
+		<mapper resource="mapper/thirdpay/ThirdPayValidcodeMapper.xml" />
+	</mappers>
+</configuration>

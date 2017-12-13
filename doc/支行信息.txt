@@ -1,0 +1,12 @@
+支行查询接口,请自行编写爬虫程序
+
+https://www.hebbank.com/corporbank/otherBankQueryWeb.do
+
+http://furhr.com/
+
+或直接使用LianlianBranchTest.java(支行信息可能不齐全)
+
+关于支行信息的说法:
+	提现时, 支行尽量填写完整, 若不知道支行名称, 填写同一个城市也可. 
+	支行信息的准确度影响 提现api到账的时间
+

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>demp</title>
+<#include "/includes/public.html" />
+</head> 
+<body>
+<form method="post"  id="myForm">
+<input type="hidden" value="${(page.totalCount)!'0'}" id="totalCount" name="totalCount"/>
+<input type="hidden" value="${(page.pageSize)!'5'}" id="pageSize" name="pageSize"/>
+<input type="hidden" value="${(page.pageNo)!'1'}" id="pageNo" name="pageNo"/>
+<div class="pd-15">
+  <div class="text-c"> 
+  	银行卡号： <input type="text" class="input-text" style="width:120px"  id="cardNo" name="cardNo" value="${(vo.cardNo)!''}">&nbsp;&nbsp;
+  	姓名： <input type="text" class="input-text" style="width:80px"  id="realName" name="realName" value="${(vo.realName)!''}">&nbsp;&nbsp;
+  	
+
+      <label>渠道:</label>
+     <span class="select-box" style="width:80px">
+	  <select class="select"  name="channel" >
+	    <option value="" selected>未选择</option>
+	    <#list verifyChannels as item>
+	    <option value="${item.value!''}" <#if (vo.channel?? ) && (vo.channel == item.value)>selected="selected"</#if> >${item.cnName!''}</option>
+	    </#list>
+	  </select>
+     </span>&nbsp;&nbsp;       
+
+   	 认证结果：
+   	 <span class="select-box" style="width:90px">
+   	 <select class="select"  name="isValid">
+         	<option <#if vo.isValid==''>selected="selected"</#if> value="">全部</option>
+         	<option <#if vo.isValid=='1'>selected="selected"</#if> value="1" >成功</option>
+         	<option <#if vo.isValid=='0'>selected="selected"</#if> value="0">失败</option>
+       </select></span>&nbsp;&nbsp;     
+     
+     <label>验证类型:</label>
+     <span class="select-box" style="width:80px">
+	  <select class="select"  name="bankVerifyType" >
+	    <option value="" selected>未选择</option>
+	    <#list verifyTypes as item>
+	    <option value="${item!''}" <#if (vo.bankVerifyType?? ) && (vo.bankVerifyType == item)>selected="selected"</#if> >${item.cnName!''}</option>
+	    </#list>
+	  </select>
+     </span>&nbsp;&nbsp;       
+     
+    <button type="submit" class="btn btn-success" ><i class="icon-search"></i> 搜索</button>
+  </div>
+  <div class="cl pd-5 bg-1 bk-gray mt-15"> 
+  <span class="l"> &nbsp;
+  </span> 
+  <span class="r">共有数据：<strong>${(page.totalCount)!'0'}</strong> 条</span> </div>
+    <table class="table table-border table-bordered table-hover table-bg table-sort">
+      <thead>
+        <tr class="text-c">
+          <th>序号</th>
+          <th>流水号</th>
+          <th>真实姓名</th>
+          <th>身份证</th>
+          <th>开户行</th>
+          <th>银行卡号</th>
+          <th>验证渠道</th>
+          <th>验证结果</th>
+          <th>验证类型</th>
+          <th>验证时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+      <#if  page??>
+      <#list page.result as bank>
+      <tr class="text-c">
+          <td>${bank_index+1}</td>
+          <td>${bank.req}</td>
+          <td class="text-c">${bank.realName}</td>
+          <td class="text-c">${bank.idNo}</td>
+          <td class="text-c">${bank.bankTypeCn}</td>
+          <td class="text-c">${bank.cardNo}</td>
+           <td class="text-c">${(bank.channelCn)!'-'}</td>
+          <td class="text-c">
+          <#if bank.isValid ==1 >
+          	验卡成功
+          	<#else>
+          	验卡失败
+          </#if>
+          (${bank.returnMsg!''})
+          </td>
+          <td class="text-c">${(bank.bankVerifyTypeCn)!''}</td>
+           <td class="text-c">${(bank.sendTime?string('yyyy-MM-dd HH:mm'))!'无'}</td>
+           <td>
+          <a title="查看" href="javascript:;" onclick="layer_show('820','470','查看','${pay.getContextPath()}/query/bank/view?id=${bank.sendId}')" 
+           	class="btn btn-secondary radius size-MINI radius" style="text-decoration:none">查看</a>
+          </td>
+        </tr>
+      	</#list>
+      </#if>
+      </tbody>
+    </table>
+    <div  class="page_con pagination" id="page"></div>
+</div>
+</form>
+
+
+<script>
+var totalCount = 0, pageSize = 0, pageNo = 0;
+/**
+ * 初始化内容
+ */
+$(function() {
+	totalCount = parseInt($.trim($("#totalCount").val()));
+	pageSize = parseInt($.trim($("#pageSize").val()));
+	pageNo = parseInt($.trim($("#pageNo").val()));
+	initPage();
+});
+/**
+ * 初始化分页对象
+ * 
+ * @returns
+ */
+function initPage() {
+	$("#page").pagination({
+		totalCount : totalCount,
+		pageSize : pageSize,
+		currentPage : pageNo - 1,
+		clickEvent : function(page_index) {
+			$("#pageNo").val(page_index + 1);
+			$("#pageSize").val(pageSize);
+			$("#myForm").submit();
+		}
+	});
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>title</title> <#include "/includes/public.html" />
+<link href="${pay.getContextPath()}/lib/icheck/icheck.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div class="pd-15" style="width: 800px;margin: 0 auto;">
+		<p style="color: red;text-align: center;" > <#if !(bank ??) >数据库未找到签约成功的银行卡 </#if></p>
+		<form class="form form-horizontal" id="myForm">
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>银行卡信息：</label>
+				<div class="formControls col-6">
+					<span>${(bank.realName!'')} | ${(bank.cardNo!'')}</span>
+				</div>
+				<div class="col-3"></div>
+			</div>
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>充值金额：</label>
+				<div class="formControls col-6">
+					<input type="text" value="100" id="amount" class="input-text" name="amount" placeholder="" datatype="*1-18" nullmsg="充值金额不能为空！">
+				</div>
+				<div class="col-3"></div>
+			</div>
+			
+			<div class="row cl"  >
+				<label class="form-label col-3"><span class="c-red">*</span>验证码：</label>
+				<div class="formControls col-6">
+					<input type="text" value="999966" id="validCode" class="input-text" name="validCode" placeholder="" datatype="n4-6" nullmsg="验证码不能为空！" style="width: 293px;">
+					<a  onclick="sendRechargeCode()" href="javascript:;" style="margin-left: 20px;color: red;"> 获取验证码</a>
+				</div>
+				<div class="col-3"></div>
+			</div>			
+			
+
+			<div class="row cl">
+				<div class="col-10 col-offset-5">
+					<input class="btn btn-primary radius" type="button" onclick="rechargeSubmit()" id="checkButton" value="提交充值" >
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<script type="text/javascript" src="${pay.getContextPath()}/lib/jquery.form.min.js"></script>
+	<script type="text/javascript" src="${pay.getContextPath()}/lib/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript">
+	/**
+	 * 初始化内容
+	 */
+	$(function(){
+		initEvent();
+	});
+	
+	
+	/**
+	 * 初始化事件
+	 */
+	function initEvent(){
+		// 初始化添加验证
+		$("#myForm").Validform({
+			tiptype:2,
+			ajaxPost:true,
+			beforeSubmit:function(){
+				return false;
+	        } 
+		});
+	}
+	/**
+	 * 获取验证码
+	 */
+	function sendRechargeCode(){
+		var url=  '${pay.getContextPath()}/recharge/code';
+		var param = {"amount":$("#amount").val() };
+		$.post(url,param,function(data){
+			if (!data.successed) {
+				layer.msg("发送失败:"+data.msg);
+			}else{
+				layer.msg("验证码已发送");
+			}
+		});
+		return false;
+	}
+	
+	
+	/**
+	 * 充值
+	 */
+	function rechargeSubmit(){
+		var url=  '${pay.getContextPath()}/recharge/submit';
+		var param = {"validCode":$("#validCode").val(),"amount":$("#amount").val() };
+		$.post(url,param,function(data){
+			if (data.successed) {
+				layer.msg("充值成功");
+			}else if (data.notSure) {
+				layer.msg("充值处理中,稍后查询");
+			}else{
+				layer.msg("充值失败:"+data.msg);
+			}
+		});
+		return false;
+	}		
+	</script>
+</body>
+</html>

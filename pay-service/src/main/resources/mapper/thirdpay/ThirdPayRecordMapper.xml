@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aaden.pay.api.comm.model.ThirdPayRecordMapper">
+	<resultMap id="BaseResultMap" type="com.aaden.pay.api.comm.model.ThirdPayRecord">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="trade_id" property="tradeId" jdbcType="CHAR" />
+		<result column="user_id" property="userId" jdbcType="CHAR" />
+		<result column="serialnumber" property="serialnumber" jdbcType="VARCHAR" />
+		<result column="thirdnumber" property="thirdnumber" jdbcType="VARCHAR" />
+		<result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+		<result column="real_name" property="realName" jdbcType="VARCHAR" />
+		<result column="bank_type" property="bankType" jdbcType="VARCHAR" />
+		<result column="order_amount" property="orderAmount" jdbcType="DOUBLE" />
+		<result column="act_amount" property="actAmount" jdbcType="DOUBLE" />
+		<result column="order_code" property="orderCode" jdbcType="VARCHAR" />
+		<result column="pay_type" property="payType" jdbcType="CHAR" />
+		<result column="pay_channel" property="payChannel" jdbcType="CHAR" />
+		<result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+		<result column="send_status" property="sendStatus" jdbcType="VARCHAR" />
+		<result column="send_count" property="sendCount" jdbcType="INTEGER" />
+		<result column="trade_status" property="tradeStatus" jdbcType="CHAR" />
+		<result column="pay_code" property="payCode" jdbcType="VARCHAR" />
+		<result column="pay_message" property="payMessage" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="success_time" property="successTime" jdbcType="TIMESTAMP" />
+		<result column="settle_time" property="settleTime" jdbcType="TIMESTAMP" />
+		<result column="card_prop" property="cardProp" jdbcType="CHAR" />
+		<result column="callback_status" property="callbackStatus" jdbcType="CHAR" />
+		<result column="costs" property="costs" jdbcType="DECIMAL" />
+	</resultMap>
+	
+	<sql id="getList_where">
+		<if test="serialnumber != null and serialnumber !=''">
+			and serialnumber = #{serialnumber,jdbcType=CHAR}
+		</if>
+		<if test="orderCode != null and orderCode !=''">
+			and order_code = #{orderCode,jdbcType=CHAR}
+		</if>
+		<if test="callbackStatus != null and callbackStatus !=''">
+			and callback_status = #{callbackStatus,jdbcType=CHAR}
+		</if>
+		<if test="cardNo != null and cardNo !=''">
+			and card_no = #{cardNo,jdbcType=CHAR}
+		</if>
+		<if test="tradeStatus != null and tradeStatus !=''">
+			and trade_status = #{tradeStatus,jdbcType=CHAR}
+		</if>
+		<if test="payChannel != null and payChannel !=''">
+			and pay_channel = #{payChannel,jdbcType=CHAR}
+		</if>
+		<if test="realName != null and realName !=''">
+			and real_name = #{realName,jdbcType=CHAR}
+		</if>
+		<if test="payType != null and payType !=''">
+			and pay_type = #{payType,jdbcType=CHAR}
+		</if>
+		<if test="sendTime != null">
+			and DATE(send_time) = #{sendTime}
+		</if>
+		<if test="sendStart != null">
+			and send_time &gt;= #{sendStart}
+		</if>
+		<if test="sendEnd != null">
+			and send_time &lt; date_add(#{sendEnd}, interval 1 day)
+		</if>	
+		<if test="successTime != null">
+			and success_time &gt;= #{successTime} and success_time &lt; date_add(#{successTime}, interval 1 day)
+		</if>
+		<if test="settleTime != null">
+			and settle_time &gt;= #{settleTime} and settle_time &lt; date_add(#{settleTime}, interval 1 day)
+		</if>
+		<if test="cardProp != null "> and card_prop=#{cardProp,jdbcType=CHAR}</if>
+	</sql>	
+	
+	<sql id="Base_Column_List">
+		id,trade_id,user_id,serialnumber,card_no,real_name,bank_type,order_amount,act_amount,order_code,pay_type,pay_channel,
+		send_time,send_status,send_count,trade_status,pay_code,pay_message,update_time,callback_status,costs,success_time,
+		settle_time,card_prop,thirdnumber
+	</sql>
+	
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select <include refid="Base_Column_List" /> from third_pay_record where trade_id=#{tradeId,jdbcType=CHAR}
+	</select>
+
+	<select id="getList" parameterType="com.aaden.pay.api.comm.model.ThirdPayRecord" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from third_pay_record where 1=1
+		<include refid="getList_where" />
+		order by send_time desc
+	</select>
+	
+	<select id="getNotSureList" parameterType="arraylist" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from third_pay_record
+		<where>
+			<foreach item="item" index="index" collection="array"
+				open="trade_status in (" separator="," close=")">
+				#{item}
+			</foreach>
+		</where>
+		order by update_time
+		limit 5000
+	</select>
+
+	<select id="getListByKeys" parameterType="arraylist" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from third_pay_record
+		<where>
+			<foreach item="item" index="index" collection="list"
+				open="serialnumber in (" separator="," close=")">
+				#{item}
+			</foreach>
+			or
+			<foreach item="item" index="index" collection="list"
+				open="order_code in (" separator="," close=")">
+				#{item}
+			</foreach>			
+		</where>
+	</select>
+	<select id="getList_Count" parameterType="com.aaden.pay.api.comm.model.ThirdPayRecord" resultType="java.lang.Integer">
+		select count(ID) from third_pay_record where 1=1
+		<include refid="getList_where" />	
+	</select>
+	<select id="selectBySerial" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select <include refid="Base_Column_List" /> from third_pay_record where serialnumber=#{serialnumber,jdbcType=VARCHAR}
+	</select>
+
+	<insert id="insertByPrimaryKey" parameterType="com.aaden.pay.api.comm.model.ThirdPayRecord">
+		insert into third_pay_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="tradeId != null">trade_id,</if>
+			<if test="userId != null">user_id,</if>
+			<if test="serialnumber != null">serialnumber,</if>
+			<if test="cardNo != null">card_no,</if>
+			<if test="realName != null">real_name,</if>
+			<if test="bankType != null">bank_type,</if>
+			<if test="orderAmount != null">order_amount,</if>
+			<if test="actAmount != null">act_amount,</if>
+			<if test="orderCode != null">order_code,</if>
+			<if test="payType != null">pay_type,</if>
+			<if test="payChannel != null">pay_channel,</if>
+			<if test="sendTime != null">send_time,</if>
+			<if test="sendStatus != null">send_status,</if>
+			<if test="sendCount != null">send_count,</if>
+			<if test="tradeStatus != null">trade_status,</if>
+			<if test="payCode != null">pay_code,</if>
+			<if test="payMessage != null">pay_message,</if>
+			<if test="updateTime != null">update_time,</if>
+			<if test="successTime != null">success_time,</if>
+			<if test="settleTime != null">settle_time,</if>
+			<if test="callbackStatus != null">callback_status,</if>
+			<if test="costs != null">costs,</if>
+			<if test="cardProp != null">card_prop,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="tradeId != null">#{tradeId,jdbcType=CHAR},</if>
+			<if test="userId != null">#{userId,jdbcType=CHAR},</if>
+			<if test="serialnumber != null">#{serialnumber,jdbcType=VARCHAR},</if>
+			<if test="cardNo != null">#{cardNo,jdbcType=VARCHAR},</if>
+			<if test="realName != null">#{realName,jdbcType=VARCHAR},</if>
+			<if test="bankType != null">#{bankType,jdbcType=VARCHAR},</if>
+			<if test="orderAmount != null">#{orderAmount,jdbcType=DOUBLE},</if>
+			<if test="actAmount != null">#{actAmount,jdbcType=DOUBLE},</if>
+			<if test="orderCode != null">#{orderCode,jdbcType=VARCHAR},</if>
+			<if test="payType != null">#{payType,jdbcType=CHAR},</if>
+			<if test="payChannel != null">#{payChannel,jdbcType=CHAR},</if>
+			<if test="sendTime != null">#{sendTime,jdbcType=TIMESTAMP},</if>
+			<if test="sendStatus != null">#{sendStatus,jdbcType=VARCHAR},</if>
+			<if test="sendCount != null">#{sendCount,jdbcType=INTEGER},</if>
+			<if test="tradeStatus != null">#{tradeStatus,jdbcType=CHAR},</if>
+			<if test="payCode != null">#{payCode,jdbcType=VARCHAR},</if>
+			<if test="payMessage != null">#{payMessage,jdbcType=VARCHAR},</if>
+			<if test="updateTime != null">#{updateTime,jdbcType=TIMESTAMP},</if>
+			<if test="successTime != null">#{successTime,jdbcType=TIMESTAMP},</if>
+			<if test="settleTime != null">#{settleTime,jdbcType=TIMESTAMP},</if>
+			<if test="callbackStatus != null">#{callbackStatus,jdbcType=CHAR},</if>
+			<if test="costs != null">#{costs,jdbcType=DECIMAL},</if>
+			<if test="cardProp != null">#{cardProp,jdbcType=CHAR},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.aaden.pay.api.comm.model.ThirdPayRecord">
+		update third_pay_record
+		<set>
+			<if test="actAmount != null">act_amount=#{actAmount,jdbcType=DOUBLE},</if>
+			<if test="sendStatus != null">send_status=#{sendStatus,jdbcType=VARCHAR},</if>
+			<if test="sendCount != null">send_count=#{sendCount,jdbcType=INTEGER},</if>
+			<if test="tradeStatus != null">trade_status=#{tradeStatus,jdbcType=CHAR},</if>
+			<if test="payCode != null">pay_code=#{payCode,jdbcType=VARCHAR},</if>
+			<if test="payMessage != null">pay_message=#{payMessage,jdbcType=VARCHAR},</if>
+			<if test="updateTime != null">update_time=#{updateTime,jdbcType=TIMESTAMP},</if>
+			<if test="successTime != null">success_time=#{successTime,jdbcType=TIMESTAMP},</if>
+			<if test="settleTime != null">settle_time=#{settleTime,jdbcType=TIMESTAMP},</if>
+			<if test="thirdnumber != null">thirdnumber=#{thirdnumber,jdbcType=CHAR},</if>
+			<if test="costs != null">costs=#{costs,jdbcType=DECIMAL},</if>
+		</set>
+		where trade_id=#{tradeId,jdbcType=CHAR}
+	</update>
+	
+	<update id="updateCallBackStatus" parameterType="com.aaden.pay.api.comm.model.ThirdPayRecord">
+		update third_pay_record
+		<set>
+			<if test="updateTime != null">update_time=#{updateTime,jdbcType=TIMESTAMP},</if>
+			<if test="callbackStatus != null">callback_status=#{callbackStatus,jdbcType=CHAR},</if>
+		</set>
+		where 
+		order_code=#{orderCode,jdbcType=CHAR} or serialnumber=#{serialnumber,jdbcType=VARCHAR}
+		
+	</update>
+	
+	
+</mapper>

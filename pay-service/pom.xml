@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.aaden</groupId>
+		<artifactId>pay-dependency</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pay-dependency/pom.xml</relativePath>
+	</parent>
+	<artifactId>pay-service</artifactId>
+	<name>pay-service</name>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.aaden</groupId>
+			<artifactId>pay-api</artifactId>
+		</dependency>
+		<!-- 通联支付 -->
+		<dependency>
+			<groupId>com.allinpay.java</groupId>
+			<artifactId>sdk</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.allinpay.java</groupId>
+			<artifactId>gateway-sdk</artifactId>
+		</dependency>
+		<!-- 通联支付end -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+
+
+	</dependencies>
+
+
+	<build>
+		<finalName>base</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>

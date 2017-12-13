@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.aaden</groupId>
+	<artifactId>pay</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+
+	<modules>
+		<!-- 管理依赖 -->
+		<module>pay-dependency</module>
+		<!-- 公共模块 -->
+		<module>pay-core</module>
+		<!-- dubbo服务api -->
+		<module>pay-api</module>
+		<!-- 支付服务 -->
+		<module>pay-service</module>
+		<!-- 客户端demo模块 -->
+		<module>pay-demo</module>
+	</modules>
+
+
+
+</project>

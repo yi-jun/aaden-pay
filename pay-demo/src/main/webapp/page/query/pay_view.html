@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>demp</title>
+<#include "/includes/public.html" />
+<link href="${pay.getContextPath()}/lib/icheck/icheck.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div class="pd-15">
+  <div class="panel panel-default">
+  	<div class="panel-header">支付记录</div>
+	<div class="panel-body">
+		 <table class="table table-border">
+			 <tbody>
+			 	<tr>
+			 	  <td>支付交易流水号:</td>
+			 	  <td>${(thirdPay.serialnumber)!''}</td>
+			 	   <td>系统订单号:</td>
+			 	   <td>${(thirdPay.orderCode)!''}</td>
+			 	</tr>
+			 	<tr>
+			 	  <td>银行卡号:</td>
+			 	  <td>${(thirdPay.cardNo)!''}</td>
+			 	  <td>开户名:</td>
+			 	  <td>${(thirdPay.realName)!''}</td>
+			 	</tr>
+			 	<tr>
+			 	   <td>开户行:</td>
+			 	   <td>${(thirdPay.bankTypeCn)!''}</td>
+			 	   <td>业务是否已经回调:</td>
+			 	   <td>${(thirdPay.callbackStatusCn)!''}</td>			 	   
+			 	</tr>
+			 	<tr>
+			 	   <td>订单金额:</td>
+			 	   <td>${(thirdPay.orderAmount)!''}</td>
+			 	   <td>实际金额:</td>
+			 	   <td>${(thirdPay.actAmount)!''}</td>
+			 	</tr>
+			 	 <tr>
+			 	   <td>清算日期:</td>
+			 	   <td>${(thirdPay.settleTime?string('yyyy-MM-dd'))!'无'}</td>
+			 	   <td>更新日期:</td>
+			 	   <td>${(thirdPay.updateTime?string('yyyy-MM-dd HH:mm:ss'))!'无'}</td>
+			 	</tr>
+			 	<tr>
+			 	   <td>支付发起时间:</td>
+			 	   <td>${(thirdPay.sendTime?string('yyyy-MM-dd HH:mm:ss'))!'无'}</td>			 	   
+			 	   <td>支付完成时间:</td>
+			 	   <td>${(thirdPay.successTime?string('yyyy-MM-dd HH:mm:ss'))!'无'}</td>
+			 	</tr>
+			 	<tr>
+			 	   <td>支付类型:</td>
+			 	   <td>${(thirdPay.payTypeCn)!''}</td>
+			 	   <td>支付渠道:</td>
+			 	   <td>${(thirdPay.payChannelCn)!''}</td>
+			 	</tr>
+			 	<tr>	
+			 	   <td>支付手续费:</td>
+			 	   <td>${(thirdPay.costs)!''}</td>
+			 	   <td>发送状态:</td>
+			 	   <td>${(thirdPay.sendStatusCn)!''}</td>
+			 	</tr>
+			 	<tr>
+			 	   <td>发送次数:</td>
+			 	   <td>${(thirdPay.sendCount)!''}</td>
+			 	   <td>交易处理状态:</td>
+			 	   <td>${(thirdPay.tradeStatusCn)!''}</td>
+			 	</tr>
+			 	 	<tr>
+			 	   <td>支付响应代号:</td>
+			 	   <td>${(thirdPay.payCode)!''}</td>
+			 	   <td>支付响应消息:</td>
+			 	   <td>${(thirdPay.payMessage)!''}</td>
+			 	</tr>
+			 </tbody>
+		  </table>
+	</div>
+  </div></div>
+</body>
+</html>

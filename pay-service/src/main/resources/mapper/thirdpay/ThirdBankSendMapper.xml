@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aaden.pay.api.comm.model.ThirdBankSendMapper" >
+  <resultMap id="BaseResultMap" type="com.aaden.pay.api.comm.model.ThirdBankSend" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="send_id" property="sendId" jdbcType="CHAR" />
+    <result column="req" property="req" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="CHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="id_no" property="idNo" jdbcType="VARCHAR" />
+    <result column="bank_type" property="bankType" jdbcType="VARCHAR" />
+    <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="return_code" property="returnCode" jdbcType="VARCHAR" />
+    <result column="return_msg" property="returnMsg" jdbcType="VARCHAR" />
+    <result column="is_valid" property="isValid" jdbcType="CHAR" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="channel" property="channel" jdbcType="VARCHAR" />
+    <result column="bank_verify_type" property="bankVerifyType" jdbcType="VARCHAR" />
+    <result column="source_type" property="sourceType" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user_login_name" property="userLoginName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,send_id,req,user_id,real_name,id_no,bank_type,card_no,mobile,return_code,return_msg,is_valid,
+    send_time,channel,remark,bank_verify_type,source_type,user_login_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select <include refid="Base_Column_List" /> from third_bank_send 
+   	where send_id=#{sendId,jdbcType=CHAR}
+  </select>
+  <select id="getLast" resultMap="BaseResultMap" parameterType="com.aaden.pay.api.comm.model.ThirdBankSend" >
+    select <include refid="Base_Column_List" /> from third_bank_send 
+   	where user_id=#{userId,jdbcType=CHAR} 
+   		and bank_verify_type=#{bankVerifyType,jdbcType=CHAR}
+   		and is_valid=#{isValid}
+   	 order by id desc limit 1
+  </select>  
+  
+  <select id="getList" parameterType="com.aaden.pay.api.comm.model.ThirdBankSend" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from third_bank_send where 1=1 <include refid="getList_Where" />
+    order by id desc
+  </select>
+  
+  <select id="getList_Count" parameterType="com.aaden.pay.api.comm.model.ThirdBankSend" resultType="java.lang.Integer">
+    select count(ID) from third_bank_send where 1=1   <include refid="getList_Where" />
+  </select>  
+  <sql id="getList_Where">
+   	<if test="req != null and req != ''"> and req=#{req,jdbcType=VARCHAR}</if>
+   	<if test="realName != null and realName != ''"> and real_name=#{realName,jdbcType=VARCHAR}</if>
+   	<if test="idNo != null and idNo != ''"> and id_no=#{idNo,jdbcType=VARCHAR}</if>
+   	<if test="cardNo != null and cardNo != ''"> and card_no=#{cardNo,jdbcType=VARCHAR}</if>
+   	<if test="mobile != null and mobile != ''"> and mobile=#{mobile,jdbcType=VARCHAR}</if>
+   	<if test="isValid != null and isValid != '' "> and is_valid=#{isValid}</if>
+   	<if test="startTime != null and startTime !=''"> and send_time&gt;= #{startTime,jdbcType=TIMESTAMP}</if>
+   	<if test="endTime != null and endTime !=''"> and send_time&lt;= date_add(#{endTime,jdbcType=TIMESTAMP}, interval 1 day)</if>
+   	<if test="channel != null and channel != ''"> and channel=#{channel,jdbcType=VARCHAR}</if>
+   	<if test="userId != null and userId != ''"> and user_id=#{userId,jdbcType=CHAR}</if>
+   	<if test="sourceType != null and sourceType != ''"> and source_type=#{sourceType,jdbcType=CHAR}</if>
+   	<if test="bankVerifyType != null"> and bank_verify_type=#{bankVerifyType,jdbcType=CHAR}</if>
+   	<if test="userLoginName != null and userLoginName != ''"> 
+   		and user_login_name = #{userLoginName}
+   	</if>  
+  </sql>
+  
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete FROM third_bank_send 
+   	where send_id=#{sendId,jdbcType=CHAR}
+  </delete>
+  <insert id="insertByPrimaryKey" parameterType="com.aaden.pay.api.comm.model.ThirdBankSend" >
+    insert into third_bank_send
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    	<if test="id != null">id,</if>
+    	<if test="sendId != null">send_id,</if>
+    	<if test="req != null">req,</if>
+    	<if test="userId != null">user_id,</if>
+    	<if test="realName != null">real_name,</if>
+    	<if test="idNo != null">id_no,</if>
+    	<if test="bankType != null">bank_type,</if>
+    	<if test="cardNo != null">card_no,</if>
+    	<if test="mobile != null">mobile,</if>
+    	<if test="returnCode != null">return_code,</if>
+    	<if test="returnMsg != null">return_msg,</if>
+    	<if test="isValid != null">is_valid,</if>
+    	<if test="sendTime != null">send_time,</if>
+    	<if test="channel != null">channel,</if>
+    	<if test="remark != null">remark,</if>
+    	<if test="userLoginName != null">user_login_name,</if>
+	   	<if test="sourceType != null and sourceType != ''">source_type,</if>
+	   	<if test="bankVerifyType != null">bank_verify_type,</if>    	
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    	<if test="id != null">#{id,jdbcType=BIGINT},</if>
+    	<if test="sendId != null">#{sendId,jdbcType=CHAR},</if>
+    	<if test="req != null">#{req,jdbcType=VARCHAR},</if>
+    	<if test="userId != null">#{userId,jdbcType=CHAR},</if>
+    	<if test="realName != null">#{realName,jdbcType=VARCHAR},</if>
+    	<if test="idNo != null">#{idNo,jdbcType=VARCHAR},</if>
+    	<if test="bankType != null">#{bankType,jdbcType=VARCHAR},</if>
+    	<if test="cardNo != null">#{cardNo,jdbcType=VARCHAR},</if>
+    	<if test="mobile != null">#{mobile,jdbcType=VARCHAR},</if>
+    	<if test="returnCode != null">#{returnCode,jdbcType=VARCHAR},</if>
+    	<if test="returnMsg != null">#{returnMsg,jdbcType=VARCHAR},</if>
+    	<if test="isValid != null">#{isValid,jdbcType=CHAR},</if>
+    	<if test="sendTime != null">#{sendTime,jdbcType=TIMESTAMP},</if>
+    	<if test="channel != null">#{channel,jdbcType=VARCHAR},</if>
+    	<if test="remark != null">#{remark,jdbcType=VARCHAR},</if>
+    	<if test="userLoginName != null">#{userLoginName,jdbcType=VARCHAR},</if>
+	   	<if test="sourceType != null and sourceType != ''">#{sourceType,jdbcType=CHAR},</if>
+	   	<if test="bankVerifyType != null">#{bankVerifyType,jdbcType=CHAR},</if>    	
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.aaden.pay.api.comm.model.ThirdBankSend" >
+    update third_bank_send 
+    <set>
+    	<if test="returnCode != null and returnCode !='' ">return_code=#{returnCode,jdbcType=VARCHAR},</if>
+    	<if test="returnMsg != null and returnMsg !='' ">return_msg=#{returnMsg,jdbcType=VARCHAR},</if>
+    	<if test="isValid != null and isValid !='' ">is_valid=#{isValid,jdbcType=CHAR},</if>
+    	<if test="sendTime != null and sendTime !='' ">send_time=#{sendTime,jdbcType=TIMESTAMP},</if>
+    	<if test="channel != null and channel !='' ">channel=#{channel,jdbcType=VARCHAR},</if>
+    	<if test="remark != null and remark !='' ">remark=#{remark,jdbcType=VARCHAR},</if>
+    	<if test="sourceType != null and sourceType != ''">source_type=#{sourceType,jdbcType=CHAR},</if>
+   		<if test="bankVerifyType != null">bank_verify_type=#{bankVerifyType,jdbcType=CHAR}</if>
+    </set>
+    	where send_id=#{sendId,jdbcType=CHAR}
+  </update>  
+</mapper>

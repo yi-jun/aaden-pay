@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aaden.pay.api.comm.model.ThirdPayValidcodeMapper" >
+  <resultMap id="BaseResultMap" type="com.aaden.pay.api.comm.model.ThirdPayValidcode" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="pay_id" property="payId" jdbcType="CHAR" />
+    <result column="user_id" property="userId" jdbcType="CHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="serialnumber" property="serialnumber" jdbcType="VARCHAR" />
+    <result column="trade_status" property="tradeStatus" jdbcType="VARCHAR" />
+    <result column="pay_channel" property="payChannel" jdbcType="VARCHAR" />
+    <result column="ret_code" property="retCode" jdbcType="VARCHAR" />
+    <result column="ret_msg" property="retMsg" jdbcType="VARCHAR" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="user_login_name" property="userLoginName" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,pay_id,user_id,amount,serialnumber,trade_status,pay_channel,ret_code,ret_msg,user_login_name,send_time,token
+
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select <include refid="Base_Column_List" /> from third_pay_validcode 
+   	where pay_id=#{payId,jdbcType=CHAR}
+  </select>
+  <select id="getLast" resultMap="BaseResultMap" parameterType="com.aaden.pay.api.comm.model.ThirdPayValidcode" >
+    select <include refid="Base_Column_List" /> from third_pay_validcode 
+   	where user_id=#{userId,jdbcType=CHAR} and  trade_status=#{tradeStatus,jdbcType=VARCHAR}
+   	order by id desc limit 1
+  </select>
+  
+  
+  <sql id="getList_where">
+     <where>
+        <if test="payId !=null and  payId != ''">
+          and pay_id=#{payId,jdbcType=CHAR}
+        </if>
+        <if test="userId !=null and  userId != ''">
+          and  user_id=#{userId,jdbcType=CHAR}
+        </if>
+        <if test="serialnumber !=null and  serialnumber != ''">
+          and  serialnumber=#{serialnumber,jdbcType=VARCHAR}
+        </if>
+        <if test="tradeStatus !=null and  tradeStatus != ''">
+          and  trade_status=#{tradeStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="payChannel !=null and  payChannel != ''">
+          and  pay_channel=#{payChannel,jdbcType=VARCHAR}
+        </if>
+        <if test="retCode !=null and  retCode != ''">
+          and  ret_code=#{retCode,jdbcType=VARCHAR}
+        </if>
+        <if test="retMsg !=null and  retMsg != ''">
+          and  ret_msg=#{retMsg,jdbcType=VARCHAR}
+        </if>
+        <if test="userLoginName !=null and  userLoginName != ''">
+         and   user_login_name=#{userLoginName,jdbcType=VARCHAR}
+        </if>
+    </where>  
+  </sql>
+  
+  <select id="getList" parameterType="com.aaden.pay.api.comm.model.ThirdPayValidcode" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from third_pay_validcode <include refid="getList_where" />
+    order by id desc
+ 
+  </select>
+  <select id="getList_Count" parameterType="com.aaden.pay.api.comm.model.ThirdPayValidcode" resultType="java.lang.Integer">
+    select count(ID) from third_pay_validcode <include refid="getList_where" />
+  </select>  
+
+  <insert id="insertByPrimaryKey" parameterType="com.aaden.pay.api.comm.model.ThirdPayValidcode" >
+    insert into third_pay_validcode
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    	<if test="id != null">id,</if>
+    	<if test="payId != null">pay_id,</if>
+    	<if test="userId != null">user_id,</if>
+    	<if test="amount != null">amount,</if>
+    	<if test="serialnumber != null">serialnumber,</if>
+    	<if test="tradeStatus != null">trade_status,</if>
+    	<if test="payChannel != null">pay_channel,</if>
+    	<if test="retCode != null">ret_code,</if>
+    	<if test="retMsg != null">ret_msg,</if>
+    	<if test="token != null">token,</if>
+    	<if test="userLoginName != null">user_login_name,</if>
+    	<if test="sendTime != null">send_time,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    	<if test="id != null">#{id,jdbcType=INTEGER},</if>
+    	<if test="payId != null">#{payId,jdbcType=CHAR},</if>
+    	<if test="userId != null">#{userId,jdbcType=CHAR},</if>
+    	<if test="amount != null">#{amount,jdbcType=DECIMAL},</if>
+    	<if test="serialnumber != null">#{serialnumber,jdbcType=VARCHAR},</if>
+    	<if test="tradeStatus != null">#{tradeStatus,jdbcType=VARCHAR},</if>
+    	<if test="payChannel != null">#{payChannel,jdbcType=VARCHAR},</if>
+    	<if test="retCode != null">#{retCode,jdbcType=VARCHAR},</if>
+    	<if test="retMsg != null">#{retMsg,jdbcType=VARCHAR},</if>
+    	<if test="token != null">#{token,jdbcType=VARCHAR},</if>
+    	<if test="userLoginName != null">#{userLoginName,jdbcType=VARCHAR},</if>
+    	<if test="sendTime != null">#{sendTime,jdbcType=TIMESTAMP},</if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.aaden.pay.api.comm.model.ThirdPayValidcode" >
+    update third_pay_validcode 
+    <set>
+    	<if test="amount != null">amount=#{amount,jdbcType=DECIMAL},</if>
+    	<if test="serialnumber != null">serialnumber=#{serialnumber,jdbcType=VARCHAR},</if>
+    	<if test="tradeStatus != null">trade_status=#{tradeStatus,jdbcType=VARCHAR},</if>
+    	<if test="payChannel != null">pay_channel=#{payChannel,jdbcType=VARCHAR},</if>
+    	<if test="retCode != null">ret_code=#{retCode,jdbcType=VARCHAR},</if>
+    	<if test="retMsg != null">ret_msg=#{retMsg,jdbcType=VARCHAR},</if>
+    	<if test="token != null">token=#{token,jdbcType=VARCHAR},</if>
+    	<if test="userLoginName != null">user_login_name=#{userLoginName,jdbcType=VARCHAR},</if>
+    	<if test="sendTime != null">send_time=#{sendTime,jdbcType=TIMESTAMP}</if>
+    </set>
+    	where pay_id=#{payId,jdbcType=CHAR}
+  </update>  
+</mapper>

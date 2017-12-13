@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>demp</title>
+<#include "/includes/public.html" />
+<link href="${pay.getContextPath()}/css/style.css" rel="stylesheet" type="text/css" />
+</head> 
+<body>
+<form method="post"  id="myForm">
+<input type="hidden" value="${(page.totalCount)!'0'}" id="totalCount" name="totalCount"/>
+<input type="hidden" value="${(page.pageSize)!'5'}" id="pageSize" name="pageSize"/>
+<input type="hidden" value="${(page.pageNo)!'1'}" id="pageNo" name="pageNo"/>
+<div class="pd-15">
+  <div class="text-c"> 
+  	支付流水号： <input type="text" class="input-text" style="width:120px" placeholder="输入流水号" id="serialnumber" name="serialnumber" value="${(vo.serialnumber)!''}">&nbsp;&nbsp;
+  	银行卡号： <input type="text" class="input-text" style="width:120px" placeholder="输入银行卡号" id="cardNo" name="cardNo" value="${(vo.cardNo)!''}">&nbsp;&nbsp;
+  	系统订单号： <input type="text" class="input-text" style="width:120px" placeholder="输入订单号" id="orderCode" name="orderCode" value="${(vo.orderCode)!''}">&nbsp;&nbsp;
+  	姓名： <input type="text" class="input-text" style="width:120px" placeholder="输入姓名" id="cardName" name="cardName" value="${(vo.cardName)!''}">&nbsp;&nbsp;
+    <button type="submit" class="btn btn-success" ><i class="icon-search"></i> 搜记录</button>
+  </div>
+  <div class="cl pd-5 bg-1 bk-gray mt-15"> 
+  <span class="l">
+  </span> <span class="r">共有数据：<strong>${(page.totalCount)!'0'}</strong> 条</span> </div>
+    <table class="table table-border table-bordered table-hover table-bg table-sort">
+      <table class="table table-border table-bordered table-hover table-bg">
+      <thead>
+        <tr class="text-c">
+          <th>序号 </th>
+          <th>交易流水号 </th>
+          <th>订单号</th>
+          <th>银行卡号</th>
+          <th>开户姓名</th>
+          <th>总金额</th>
+          <th>实际金额</th>
+          <th>渠道</th>
+          <th>支付类型</th>
+          <th>发送时间</th>
+          <th>交易状态</th>
+          <th>第三方返回信息</th>
+          <th width="">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+      
+        <#if  page??>
+        	<#list page.result as thirdPay>
+		          <td class="${classNames}">${thirdPay_index+1}</td>
+		          <td class="${classNames}">${thirdPay.serialnumber}</td>
+		          <td class="text-c ${classNames}">${thirdPay.orderCode}</td>
+		          <td class="text-c ${classNames}">${thirdPay.cardNo}</td>
+		          <td class="text-c ${classNames}">${thirdPay.realName}</td>
+		          <td class="text-c ${classNames}">${thirdPay.orderAmount}</td>
+		          <td class="text-c ${classNames}">${thirdPay.actAmount}</td>
+		          <td class="text-c ${classNames}">${thirdPay.payChannelCn}</td>
+		          <td class="text-c ${classNames}">${thirdPay.payTypeCn}</td>
+		          <td class="text-c ${classNames}">${(thirdPay.sendTime?string('yyyy-MM-dd HH:mm'))!'无'}</td>
+		          <td class="text-c ${classNames}">
+           		  	<div class="text-w110" title="${thirdPay.tradeStatusCn}">${thirdPay.tradeStatusCn}</div>
+           		  </td>
+		          <td class="text-c  ${classNames}">
+		            <div class="text-w110" title="  ${(thirdPay.payMessage)!'无'}（状态码：${(thirdPay.payCode)!'无'}）">  ${(thirdPay.payMessage)!'无'}（状态码：${(thirdPay.payCode)!'无'}）</div>
+		          </td>
+		          <td class="text-c">
+		           		<a title="查看"  	class="btn btn-secondary radius size-MINI radius" href="javascript:;" onclick="layer_show('720','550','查看明细','${pay.getContextPath()}/query/pay/view?serialnumber=${thirdPay.serialnumber}')" style="text-decoration:none">查看</a>
+		          
+		          <#if thirdPay.checkable >
+			            	<a title="对账" onclick="recheck('${thirdPay.serialnumber}','${thirdPay.orderCode}')" href="javascript:;" class="btn btn-secondary radius size-MINI radius" style="text-decoration:none;">对账</a>
+		          </#if>
+		          <#if thirdPay.callbackable >
+			            	<a title="回调" onclick="callback('${thirdPay.serialnumber}','${thirdPay.orderCode}')" href="javascript:;" class="btn btn-warning radius size-MINI radius" style="text-decoration:none;">回调</a>
+		          </#if>
+		          </td>
+		        </tr>
+        	</#list>
+        </#if>
+        
+      </tbody>
+    </table>
+    <div  class="page_con pagination" id="page"></div>
+</div>
+</form>
+<script>
+var totalCount = 0, pageSize = 0, pageNo = 0;
+/**
+ * 初始化内容
+ */
+$(function() {
+	totalCount = parseInt($.trim($("#totalCount").val()));
+	pageSize = parseInt($.trim($("#pageSize").val()));
+	pageNo = parseInt($.trim($("#pageNo").val()));
+	initPage();
+});
+/**
+ * 初始化分页对象
+ * 
+ * @returns
+ */
+function initPage() {
+	$("#page").pagination({
+		totalCount : totalCount,
+		pageSize : pageSize,
+		currentPage : pageNo - 1,
+		clickEvent : function(page_index) {
+			$("#pageNo").val(page_index + 1);
+			$("#pageSize").val(pageSize);
+			$("#myForm").submit();
+		}
+	});
+}
+
+
+/**
+ * 对账
+ */
+function recheck(serialnumber,orderCode) {
+	if (serialnumber == "" || typeof (serialnumber) == "undefined") {
+		layer.msg("请选择要对账的内容!");
+		setTimeout(function() {
+			layer.closeAll();
+		}, 1500);
+		return;
+	}
+	return layer.confirm('确定要对账选中的内容吗？', function(index) {
+		$.ajax({
+			url : basePath + "/query/pay/recheck",
+			type : "POST",
+			dataType : "JSON",
+			data : {
+				serialnumber : serialnumber
+			},
+			async : false,
+			cache : false,
+			success : function(data) {
+				if (data.failure) {
+					layer.msg(data.msg);
+					setTimeout(function() {
+// 						$("#orderCode").val(orderCode);
+						$("#myForm").submit();
+					}, 2500);					
+				} else {
+					layer.msg(data.msg);
+					setTimeout(function() {
+						$("#myForm").submit();
+					}, 2500);
+				}
+			}
+		});
+	});
+}
+
+/**
+ * 回调
+ */
+function callback(serialnumber,orderCode) {
+	if (serialnumber == "" || typeof (serialnumber) == "undefined") {
+		layer.msg("请选择要回调的内容!");
+		setTimeout(function() {
+			layer.closeAll();
+		}, 1500);
+		return;
+	}
+	return layer.confirm('确定要回调选中的内容吗？', function(index) {
+		$.ajax({
+			url : basePath + "/query/pay/callback",
+			type : "POST",
+			dataType : "JSON",
+			data : {
+				serialnumber : serialnumber
+			},
+			async : false,
+			cache : false,
+			success : function(data) {
+				layer.msg(data);
+				setTimeout(function() {
+					$("#myForm").submit();
+				}, 2500);
+			}
+		});
+	});
+}
+
+</script>
+</body>
+</html>

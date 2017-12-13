@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>demp</title>
+<#include "/includes/public.html" />
+<link href="${pay.getContextPath()}/css/style.css" rel="stylesheet" type="text/css" />
+</head> 
+<body>
+<form method="post"  id="sms">
+<input type="hidden" value="${(page.totalCount)!'0'}" id="totalCount" name="totalCount"/>
+<input type="hidden" value="${(page.pageSize)!'5'}" id="pageSize" name="pageSize"/>
+<input type="hidden" value="${(page.pageNo)!'1'}" id="pageNo" name="pageNo"/>
+<div class="pd-15">
+  <div class="text-c"> 
+  	流水号： <input type="text" class="input-text" style="width:200px" placeholder="输入流水号" id="serialnumber" name="serialnumber" value="${(vo.serialnumber)!''}">&nbsp;&nbsp;
+  	登录账户： <input type="text" class="input-text" style="width:120px" placeholder="输入登录账户" id="userLoginName" name="userLoginName" value="${(vo.userLoginName)!''}">&nbsp;&nbsp;
+  	
+     <label>支付渠道:</label>
+     <span class="select-box" style="width:80px">
+	  <select class="select"  name="payChannel" >
+	    <option value="" selected>未选择</option>
+	    <#list payChannels as item>
+	    <option value="${item.value!''}" <#if (vo.payChannel?? ) && (vo.payChannel == item.value)>selected="selected"</#if> >${item.cnName!''}</option>
+	    </#list>
+	  </select>
+     </span>&nbsp;&nbsp;
+  	
+     <label>状态:</label>
+     <span class="select-box" style="width:100px">
+	  <select class="select"  name="tradeStatus" >
+	    <option value="" selected>未选择</option>
+	    <#list tradeStatus as item>
+	    <option value="${item.value!''}" <#if (vo.tradeStatus?? ) && (vo.tradeStatus == item.value)>selected="selected"</#if> >${item.getName()!''}</option>
+	    </#list>
+	  </select>
+      </span>&nbsp;&nbsp;  	
+  	
+    <button type="submit" class="btn btn-success" ><i class="icon-search"></i> 搜记录</button>
+  </div>
+  <div class="cl pd-5 bg-1 bk-gray mt-15"> 
+  <span class="l">
+  </span> <span class="r">共有数据：<strong>${(page.totalCount)!'0'}</strong> 条</span> </div>
+    <table class="table table-border table-bordered table-hover table-bg table-sort">
+      <table class="table table-border table-bordered table-hover table-bg">
+      <thead>
+        <tr class="text-c">
+          <th>序号 </th>
+          <th>交易流水号 </th>
+          <th>登录账户</th>
+          <th>充值金额</th>
+          <th>支付渠道</th>
+          <th>发送时间</th>
+          <th>交易状态</th>
+          <th>交易结果</th>
+        </tr>
+      </thead>
+      <tbody>
+      
+        <#if  page??>
+        	<#list page.result as thirdPay>
+        		
+        		<tr class="text-c">
+		          <td>${thirdPay_index+1}</td>
+		          <td>${thirdPay.serialnumber}</td>
+		          <td class="text-c">${thirdPay.userLoginName}</td>
+		          <td class="text-c">${thirdPay.amount}</td>
+		          <td class="text-c">${thirdPay.payChannelCn}</td>
+		          <td class="text-c">${(thirdPay.sendTime?string('yyyy-MM-dd HH:mm'))!'无'}</td>
+		            <td class="text-c">
+           		  <div class="text-w110" title="${thirdPay.tradeStatusCn}">${thirdPay.tradeStatusCn}</div>
+           		  </td>
+		          <td class="text-c">
+		            <div class="text-w110" title="${(thirdPay.retMsg)!'无'}（状态码：${(thirdPay.retCode)!'无'}）">  ${(thirdPay.retMsg)!'无'}（状态码：${(thirdPay.retCode)!'无'}）</div>
+		        </td>
+		        </tr>
+        	</#list>
+        </#if>
+        
+      </tbody>
+    </table>
+    <div  class="page_con pagination" id="page"></div>
+</div>
+</form>
+<script  type="text/javascript" >
+var totalCount = 0, pageSize = 0, pageNo = 0;
+/**
+ * 初始化内容
+ */
+$(function() {
+	totalCount = parseInt($.trim($("#totalCount").val()));
+	pageSize = parseInt($.trim($("#pageSize").val()));
+	pageNo = parseInt($.trim($("#pageNo").val()));
+	initPage();
+});
+/**
+ * 初始化分页对象
+ * 
+ * @returns
+ */
+function initPage() {
+	$("#page").pagination({
+		totalCount : totalCount,
+		pageSize : pageSize,
+		currentPage : pageNo - 1,
+		clickEvent : function(page_index) {
+			$("#pageNo").val(page_index + 1);
+			$("#pageSize").val(pageSize);
+			$("#sms").submit();
+		}
+	});
+}
+</script>
+<script type="text/javascript" src="${pay.getContextPath()}/lib/My97DatePicker/WdatePicker.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aaden.pay.api.comm.model.ThirdPayQuotaMapper" >
+  <resultMap id="BaseResultMap" type="com.aaden.pay.api.comm.model.ThirdPayQuota" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="quota_id" property="quotaId" jdbcType="CHAR" />
+    <result column="pay_channel" property="payChannel" jdbcType="VARCHAR" />
+    <result column="bank_type" property="bankType" jdbcType="VARCHAR" />
+    <result column="single_amount" property="singleAmount" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,quota_id,pay_channel,bank_type,single_amount,remark
+
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select <include refid="Base_Column_List" /> from third_pay_quota 
+   	where quota_id=#{quotaId,jdbcType=CHAR}
+  </select>
+  
+  
+  <sql id="getList_where">
+	      <where>
+	        <if test="quotaId !=null and  quotaId != ''">
+	         and quota_id=#{quotaId,jdbcType=CHAR}
+	        </if>
+	        <if test="payChannel !=null and  payChannel != ''">
+	        and  pay_channel=#{payChannel,jdbcType=VARCHAR}
+	        </if>
+	        <if test="bankType !=null and  bankType != ''">
+	         and bank_type=#{bankType,jdbcType=VARCHAR}
+	        </if>
+	        <if test="remark !=null and  remark != ''">
+	        and  remark=#{remark,jdbcType=VARCHAR}
+	        </if>
+	    </where>  
+  </sql>
+  <select id="getList" parameterType="com.aaden.pay.api.comm.model.ThirdPayQuota" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from third_pay_quota
+    	<include refid="getList_where" />
+  </select>
+  <select id="getList_Count" parameterType="com.aaden.pay.api.comm.model.ThirdPayQuota" resultType="java.lang.Integer">
+    select count(ID) from third_pay_quota
+		<include refid="getList_where" />
+  </select>  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete FROM third_pay_quota 
+   	where quota_id=#{quotaId,jdbcType=CHAR}
+  </delete>
+  <insert id="insertByPrimaryKey" parameterType="com.aaden.pay.api.comm.model.ThirdPayQuota" >
+    insert into third_pay_quota
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    	<if test="id != null">id,</if>
+    	<if test="quotaId != null">quota_id,</if>
+    	<if test="payChannel != null">pay_channel,</if>
+    	<if test="bankType != null">bank_type,</if>
+    	<if test="singleAmount != null">single_amount,</if>
+    	<if test="remark != null">remark,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    	<if test="id != null">#{id,jdbcType=INTEGER},</if>
+    	<if test="quotaId != null">#{quotaId,jdbcType=CHAR},</if>
+    	<if test="payChannel != null">#{payChannel,jdbcType=VARCHAR},</if>
+    	<if test="bankType != null">#{bankType,jdbcType=VARCHAR},</if>
+    	<if test="singleAmount != null">#{singleAmount,jdbcType=DECIMAL},</if>
+    	<if test="remark != null">#{remark,jdbcType=VARCHAR},</if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.aaden.pay.api.comm.model.ThirdPayQuota" >
+    update third_pay_quota 
+    <set>
+    	<if test="payChannel != null">pay_channel=#{payChannel,jdbcType=VARCHAR},</if>
+    	<if test="bankType != null">bank_type=#{bankType,jdbcType=VARCHAR},</if>
+    	<if test="singleAmount != null">single_amount=#{singleAmount,jdbcType=DECIMAL},</if>
+    	<if test="remark != null">remark=#{remark,jdbcType=VARCHAR}</if>
+    </set>
+    	where quota_id=#{quotaId,jdbcType=CHAR}
+  </update>  
+</mapper>

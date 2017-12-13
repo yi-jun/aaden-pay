@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>demp</title>
+<#include "/includes/public.html" />
+</head>
+<body>
+
+<div class="pd-15">
+  <div class="panel panel-default">
+  	<div class="panel-header">验卡记录</div>
+	<div class="panel-body">
+		 <table class="table table-border">
+			 <tbody>
+			 	<tr>
+			 	  <td>真实姓名:</td>
+			 	  <td>${(bankSend.realName)!''}</td>
+			 	  <td>身份证:</td>
+			 	  <td>${(bankSend.idNo)!''}</td>
+			 	</tr>
+			 	<tr>
+			 	  <td>银行卡:</td>
+			 	  <td>${(bankSend.cardNo)!''}</td>
+			 	  <td>开户行:</td>
+			 	  <td>${(bankSend.bankTypeCn)!''}</td>
+			 	</tr>
+			 	
+			 	<tr>
+			 	  <td>流水号:</td>
+			 	  <td>${(bankSend.req)!''}</td>
+			 	  <td>预留手机:</td>
+			 	  <td>${(bankSend.mobile)!''}</td>
+			 	</tr>
+			 	
+			 	<tr>
+			 	  <td>响应代码:</td>
+			 	  <td>${(bankSend.returnCode)!''}</td>
+			 	  <td>响应消息:</td>
+			 	  <td>${(bankSend.returnMsg)!''}</td>
+			 	</tr>
+			 	<tr>
+			 	   <td>发送渠道:</td>
+			 	   <td>${(bankSend.channelCn)!''}</td>
+			 	   <td>验卡结果:</td>
+			 	   <td><#if bankSend.isValid ==1 >验卡成功<#else>验卡失败</#if></td>
+			 	</tr>
+			 	 <tr>
+			 	   <td>发送时间:</td>
+			 	   <td>${(bankSend.sendTime?string('yyyy-MM-dd HH:mm:ss'))!'无'}</td>
+			 	  <td>备注:</td>
+			 	  <td > ${(bankSend.remark)!''}</td>
+			 	</tr>
+			 </tbody>
+		  </table>
+	</div>
+  </div></div>
+</body>
+</html>
