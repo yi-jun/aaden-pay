@@ -18,9 +18,9 @@ import com.aaden.pay.core.utils.FileUtils;
 import com.aaden.pay.core.utils.XmlUtils;
 
 /**
- *  @Description 内存解析,存储卡bin,行政区.xml
- *  @author aaden
- *  @date 2017年12月1日
+ * @Description 内存解析,存储卡bin,行政区.xml
+ * @author aaden
+ * @date 2017年12月1日
  */
 public class MemoryLabelParser {
 
@@ -95,6 +95,10 @@ public class MemoryLabelParser {
 
 			// 加载行政区
 			Document document = XmlUtils.getDocument(path);
+			if (document == null) {
+				logger.warn("解析行政区.xml失败");
+				return;
+			}
 
 			Element element = null;
 			Area area = null;
@@ -125,6 +129,10 @@ public class MemoryLabelParser {
 
 			BANK_CARD_BIN_MAP = new HashMap<String, BankCardBin>();
 			Document document = XmlUtils.getDocument(path);
+			if (document == null) {
+				logger.warn("解析银行卡bin.xml失败");
+				return;
+			}
 			Element root = document.getRootElement();
 			Element card = null;
 			for (@SuppressWarnings("unchecked")

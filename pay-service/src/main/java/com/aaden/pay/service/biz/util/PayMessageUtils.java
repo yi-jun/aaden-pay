@@ -86,7 +86,7 @@ public class PayMessageUtils {
 		if (path == null) {
 			logger.warn(baofooPath + " 路径不存在");
 		} else {
-			InputStream inputStream = new FileInputStream(FileUtils.getClassOrSystemPath(path));
+			InputStream inputStream = new FileInputStream(path);
 			baofooProperties.load(new InputStreamReader(inputStream, "UTF-8"));
 		}
 	}

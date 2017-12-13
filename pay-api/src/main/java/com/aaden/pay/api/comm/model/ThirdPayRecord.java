@@ -59,6 +59,8 @@ public class ThirdPayRecord extends BaseModel {
 
 	private TradeStatus tradeStatus;// 交易处理状态
 
+	private TradeStatus oldTradeStatus;// 交易处理状态,用于数据库乐观锁,参考更新sql
+
 	private String payCode; // 支付响应代号
 
 	private String payMessage; // 支付响应消息
@@ -252,6 +254,14 @@ public class ThirdPayRecord extends BaseModel {
 
 	public void initPrimaryKey() {
 		this.setTradeId(randomUUID());
+	}
+
+	public TradeStatus getOldTradeStatus() {
+		return oldTradeStatus;
+	}
+
+	public void setOldTradeStatus(TradeStatus oldTradeStatus) {
+		this.oldTradeStatus = oldTradeStatus;
 	}
 
 	public Date getSuccessTime() {

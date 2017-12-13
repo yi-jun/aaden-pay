@@ -81,6 +81,7 @@ public class PaymentTransaction {
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public void parseUpdatePayRecord(ThirdPayResponse tpResp, ThirdPayRecord payRecord) {
 		payRecord.setSendCount(payRecord.getSendCount() + 1);
+		payRecord.setOldTradeStatus(payRecord.getTradeStatus());
 		if (tpResp == null) {
 			payRecord.setTradeStatus(TradeStatus.RETRY);
 		} else {

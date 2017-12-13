@@ -191,7 +191,7 @@
 			<if test="thirdnumber != null">thirdnumber=#{thirdnumber,jdbcType=CHAR},</if>
 			<if test="costs != null">costs=#{costs,jdbcType=DECIMAL},</if>
 		</set>
-		where trade_id=#{tradeId,jdbcType=CHAR}
+		where trade_id=#{tradeId,jdbcType=CHAR} and trade_status = #{oldTradeStatus,jdbcType=CHAR}
 	</update>
 	
 	<update id="updateCallBackStatus" parameterType="com.aaden.pay.api.comm.model.ThirdPayRecord">

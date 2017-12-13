@@ -98,6 +98,7 @@ public class PayTaskServiceImpl implements PayTaskService {
 				continue;
 
 			ThirdPayRecord obj = new ThirdPayRecord();
+			obj.setOldTradeStatus(item.getTradeStatus());
 			obj.setTradeId(item.getTradeId());
 			obj.setUpdateTime(DateUtils.today());
 			if (resp.isSuccessed()) {
