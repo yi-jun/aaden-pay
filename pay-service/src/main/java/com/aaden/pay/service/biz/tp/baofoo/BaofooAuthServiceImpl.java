@@ -9,7 +9,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.aaden.pay.api.biz.enums.baofoo.BaofooBankType;
 import com.aaden.pay.api.biz.vo.PayRequest;
+import com.aaden.pay.api.comm.enums.BankType;
 import com.aaden.pay.api.comm.enums.PayChannel;
 import com.aaden.pay.api.comm.enums.PayType;
 import com.aaden.pay.api.comm.enums.SendStatus;
@@ -180,4 +182,8 @@ public class BaofooAuthServiceImpl extends AbstractThirdPayService {
 		return response;
 	}
 
+	@Override
+	public boolean supportBankType(BankType bankType) {
+		return BaofooBankType.parse(bankType) != null;
+	}
 }

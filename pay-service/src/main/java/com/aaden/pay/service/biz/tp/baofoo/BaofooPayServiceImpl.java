@@ -9,7 +9,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.aaden.pay.api.biz.enums.baofoo.BaofooPayBankType;
 import com.aaden.pay.api.biz.vo.PayRequest;
+import com.aaden.pay.api.comm.enums.BankType;
 import com.aaden.pay.api.comm.enums.PayChannel;
 import com.aaden.pay.api.comm.enums.PayType;
 import com.aaden.pay.api.comm.enums.SendStatus;
@@ -27,9 +29,9 @@ import com.aaden.pay.service.biz.tp.baofoo.vo.TransRespBF0040004;
 import com.aaden.pay.service.biz.vo.ThirdPayResponse;
 
 /**
- *  @Description 宝付代付实现
- *  @author aaden
- *  @date 2017年12月20日
+ * @Description 宝付代付实现
+ * @author aaden
+ * @date 2017年12月20日
  */
 @Service("baofooPayService")
 @ChannelValue(channel = PayChannel.BAOFOO, payType = { PayType.PAYOUT })
@@ -167,4 +169,13 @@ public class BaofooPayServiceImpl extends AbstractThirdPayService {
 		return BigDecimal.ONE;// 代付 1元一笔
 	}
 
+	@Override
+	public boolean supportBankType(BankType bankType) {
+		return BaofooPayBankType.parse(bankType) != null;
+	}
+
+	@Override
+	public BigDecimal getRechargeFeeRate() {
+		return BigDecimal.ONE;
+	}
 }

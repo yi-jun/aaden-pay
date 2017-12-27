@@ -29,7 +29,7 @@ import com.aaden.pay.service.comm.service.ThirdPayRecordService;
  *  @author aaden
  *  @date 2017年12月16日
  */
-@Service
+@Service("payTaskService")
 public class PayTaskServiceImpl implements PayTaskService {
 	SimpleLogger logger = SimpleLogger.getLogger(this.getClass());
 

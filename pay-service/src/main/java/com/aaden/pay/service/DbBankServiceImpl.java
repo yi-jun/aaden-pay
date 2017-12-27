@@ -17,7 +17,7 @@ import com.aaden.pay.service.comm.service.ThirdBankSendService;
  *  @author aaden
  *  @date 2017年12月25日
  */
-@Service
+@Service("dbBankService")
 public class DbBankServiceImpl implements DbBankService {
 
 	protected SimpleLogger logger = SimpleLogger.getLogger(this.getClass());

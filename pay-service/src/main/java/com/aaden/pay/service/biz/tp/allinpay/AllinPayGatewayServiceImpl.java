@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.aaden.pay.api.biz.enums.allinpay.AllinPayBankType;
+import com.aaden.pay.api.comm.enums.BankType;
 import com.aaden.pay.api.comm.enums.CardProp;
 import com.aaden.pay.api.comm.enums.PayChannel;
 import com.aaden.pay.api.comm.enums.PayType;
@@ -73,7 +75,8 @@ public class AllinPayGatewayServiceImpl extends AbstractThirdPayService {
 			tpResponse.setPayMessage(payResult.getErrorCode());// 交易成功,该值为空
 			TradeStatus tradeStatus = adaptor.parseTradeStatus(payResult.getPayResult());
 			tpResponse.setTradeStatus(tradeStatus);
-			tpResponse.setActAmount(new BigDecimal(payResult.getOrderAmount()).divide(BigDecimalUtils.ONE_HUNDRED).setScale(2, BigDecimal.ROUND_DOWN));// 整数,单位为分
+			tpResponse.setActAmount(new BigDecimal(payResult.getOrderAmount()).divide(BigDecimalUtils.ONE_HUNDRED)
+					.setScale(2, BigDecimal.ROUND_DOWN));// 整数,单位为分
 			if (TradeStatus.SUCCEED == tradeStatus) {
 				Date finsh = DateUtils.parseAuto(payResult.getPayDatetime());// yyyyMMDDhhmmss
 				if (finsh != null) {
@@ -154,6 +157,16 @@ public class AllinPayGatewayServiceImpl extends AbstractThirdPayService {
 		if (CardProp.company == tr.getCardProp())
 			return orgFee;
 		return tr.getOrderAmount().multiply(feeRate).setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
+
+	@Override
+	public boolean supportBankType(BankType bankType) {
+		return AllinPayBankType.parse(bankType) != null;
+	}
+
+	@Override
+	public BigDecimal getRechargeFeeRate() {
+		return feeRate;
 	}
 
 }

@@ -12,6 +12,7 @@ import com.aaden.pay.api.biz.config.Area;
 import com.aaden.pay.api.biz.config.BankCardBin;
 import com.aaden.pay.api.biz.vo.BankRequest;
 import com.aaden.pay.api.biz.vo.BankResponse;
+import com.aaden.pay.api.comm.enums.BankType;
 import com.aaden.pay.api.comm.enums.BankVerifyType;
 import com.aaden.pay.api.comm.enums.PayChannel;
 import com.aaden.pay.api.comm.model.ThirdBankSend;
@@ -20,6 +21,8 @@ import com.aaden.pay.core.contants.ErrorMsgConstant;
 import com.aaden.pay.core.eumus.IsValid;
 import com.aaden.pay.core.logger.SimpleLogger;
 import com.aaden.pay.core.orm.exception.DataBaseAccessException;
+import com.aaden.pay.core.search.SearchService;
+import com.aaden.pay.core.search.model.IndexModel;
 import com.aaden.pay.core.serialnumber.KeyInfo;
 import com.aaden.pay.core.utils.DateUtils;
 import com.aaden.pay.core.utils.IdCardUtils;
@@ -38,7 +41,7 @@ import com.aaden.pay.service.comm.service.ThirdBankSendService;
  * @author aaden
  * @date 2017年12月16日
  */
-@Service
+@Service("bankService")
 public class BankServiceImpl implements BankService {
 
 	protected SimpleLogger logger = SimpleLogger.getLogger(this.getClass());
@@ -52,6 +55,8 @@ public class BankServiceImpl implements BankService {
 	private ThirdBankRoute bankRoute;
 	@Autowired
 	private RechargeRoute rechargeRoute;
+	@Autowired
+	private SearchService searchService;
 
 	@Override
 	public BankResponse verifyBank(BankRequest request) {
@@ -227,6 +232,12 @@ public class BankServiceImpl implements BankService {
 		bankSend.setIsValid(IsValid.INVALID.getValue());
 		bankSend.setUserLoginName(request.getInfo().getUserLoginName());
 		return bankSend;
+	}
+
+	@Override
+	public List<IndexModel> queryBrank(String cityCode, BankType bankType, String key) {
+		List<IndexModel> list = searchService.queryBrank(cityCode, bankType.name(), key);
+		return list;
 	}
 
 }

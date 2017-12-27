@@ -44,6 +44,7 @@ public class AllinPaymentTest {
 
 			// 指定支付渠道,可选
 			payRequest.getRecharge().setPayChannel(PayChannel.ALLIN);
+			payRequest.getRecharge().setIdNo("1111");
 			PayResponse resp = paymentSerivce.rechargeSmsCode(payRequest);
 			System.out.println(JSON.toJSON(resp));
 		} catch (Exception e) {

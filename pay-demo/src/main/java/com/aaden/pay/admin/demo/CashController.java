@@ -6,7 +6,6 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,6 @@ import com.aaden.pay.api.comm.enums.PayChannel;
 import com.aaden.pay.api.comm.enums.TradeStatus;
 import com.aaden.pay.api.comm.model.ThirdBankSend;
 import com.aaden.pay.core.eumus.IsValid;
-import com.aaden.pay.core.search.SearchService;
 import com.aaden.pay.core.search.model.IndexModel;
 import com.aaden.pay.core.utils.CollectionUtils;
 import com.alibaba.fastjson.JSONArray;
@@ -48,8 +46,6 @@ public class CashController extends BasicController {
 	private PaymentService paymentService;
 	@Autowired
 	private DbBankService dbBankService;
-	@Autowired
-	private SearchService searchService;
 	@Autowired
 	private BankService bankService;
 
@@ -104,11 +100,8 @@ public class CashController extends BasicController {
 	@RequestMapping(value = "/branchList", produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public JSONArray getBranchList(HttpServletRequest request, BankType bankType, String cityCode, String keyWord) {
-		StringBuilder key = new StringBuilder();
-		if (!StringUtils.isBlank(keyWord)) {
-			key.append(keyWord);
-		}
-		List<IndexModel> list = searchService.queryBrank(cityCode, bankType.name(), key.toString());
+		keyWord = keyWord == null ? "" : keyWord;
+		List<IndexModel> list = bankService.queryBrank(cityCode, bankType, keyWord);
 		JSONArray array = new JSONArray();
 		if (list != null) {
 			for (IndexModel item : list) {

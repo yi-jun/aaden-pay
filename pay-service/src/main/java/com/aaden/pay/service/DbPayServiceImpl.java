@@ -27,7 +27,7 @@ import com.aaden.pay.service.comm.service.ThirdPayValidcodeService;
  *  @author aaden
  *  @date 2017年12月24日
  */
-@Service
+@Service("dbPayService")
 public class DbPayServiceImpl implements DbPayService {
 
 	@Autowired

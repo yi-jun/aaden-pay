@@ -38,6 +38,7 @@ public class PaymentConstans {
 	private static Map<BankType, String> gatewayMap = new HashMap<>();
 	/** 代付单笔限额map */
 	private static Map<PayChannel, BigDecimal> payoutMap = new HashMap<>();
+	
 	static {
 		gatewayMap.put(BankType.ICBC, "U盾：单笔、单日100万元<br>电子银行口令卡（开通短信认证）：单笔2000元、单日5000元<br>电子银行口令卡（未通短信认证）：单笔500元、单日1000元");
 		gatewayMap.put(BankType.ABC, "动态口令卡：单笔1000元、单日3000元<br>移动证书：无限额");

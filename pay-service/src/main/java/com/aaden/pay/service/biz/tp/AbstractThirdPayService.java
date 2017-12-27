@@ -1,6 +1,5 @@
 package com.aaden.pay.service.biz.tp;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,10 +51,10 @@ public abstract class AbstractThirdPayService implements ThirdPayService {
 		return new ArrayList<ThirdPayResponse>();
 	}
 
-	@Override
-	public BigDecimal getRechargeFeeRate() {
-		return BigDecimal.ZERO;
-	}
+//	@Override
+//	public BigDecimal getRechargeFeeRate() {
+//		return BigDecimal.ZERO;
+//	}
 
 	/**
 	 * 此处可选用内部的短信渠道发送短信,若支付API要求支付公司发送短信,覆盖此方法即可

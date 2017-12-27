@@ -112,7 +112,7 @@ public class AllinAuthpayAdaptor extends PaymentCommon {
 		} catch (Exception e) {// 发送异常
 			logger.error(" 通联连接异常:", e);
 		}
-		AipgRsp aipgrsp = XSUtil.parseRsp(resultXml);
+		AipgRsp aipgrsp = resultXml == null ? null : XSUtil.parseRsp(resultXml);
 		return aipgrsp;
 	}
 
@@ -168,7 +168,7 @@ public class AllinAuthpayAdaptor extends PaymentCommon {
 		dr.setTYPE(1);// 0.按完成日期1.按提交日期，默认为1 ;如果使用0查询，未完成交易将查不到
 		String xml = AllinpayXmlTools.buildXml(aipgReq, Boolean.TRUE);
 		String resultXml = sendXml(xml, url, Boolean.FALSE);
-		AipgRsp aipgrsp = XSUtil.parseRsp(resultXml);
+		AipgRsp aipgrsp = resultXml == null ? null : XSUtil.parseRsp(resultXml);
 		return aipgrsp;
 	}
 
@@ -204,7 +204,7 @@ public class AllinAuthpayAdaptor extends PaymentCommon {
 		aipg.addTrx(rnpa);
 		String xml = XmlTools.buildXml(aipg, true).replaceAll(RNPA.class.getName(), RNPA.class.getSimpleName());
 		String retXml = this.sendXml(xml, this.url, false);
-		AllinpayAipgResp aipgRsp = XmlBeanJsonConverUtil.xmlStringToBean(retXml, AllinpayAipgResp.class);
+		AllinpayAipgResp aipgRsp = retXml == null ? null : XmlBeanJsonConverUtil.xmlStringToBean(retXml, AllinpayAipgResp.class);
 		if (aipgRsp != null)
 			aipgRsp.setReturnData(retXml);
 		return aipgRsp;
@@ -226,7 +226,7 @@ public class AllinAuthpayAdaptor extends PaymentCommon {
 
 		String xml = XmlTools.buildXml(aipg, true).replaceAll(RNPC.class.getName(), RNPC.class.getSimpleName());
 		String retXml = this.sendXml(xml, this.url, false);
-		AllinpayAipgResp aipgRsp = XmlBeanJsonConverUtil.xmlStringToBean(retXml, AllinpayAipgResp.class);
+		AllinpayAipgResp aipgRsp = retXml == null ? null : XmlBeanJsonConverUtil.xmlStringToBean(retXml, AllinpayAipgResp.class);
 		if (aipgRsp != null)
 			aipgRsp.setReturnData(retXml);
 		return aipgRsp;
@@ -301,7 +301,7 @@ public class AllinAuthpayAdaptor extends PaymentCommon {
 			return resultMsg;
 		} catch (Exception e) {
 			logger.error("通联请求发送异常:", e);
-			return "";
+			return null;
 		}
 	}
 
@@ -359,7 +359,7 @@ public class AllinAuthpayAdaptor extends PaymentCommon {
 			logger.error("下载通联对账文件异常", e1);
 			return null;
 		}
-
+		resp = resp == null ? "" : resp;
 		logger.debug("=====================通联对账文件:=======================");
 		logger.debug(resp);
 

@@ -50,7 +50,7 @@ public class AllinGatewayTest {
 		// 指定渠道
 		payRequest.getRecharge().setPayChannel(PayChannel.ALLIN);
 		PayResponse resp = paymentService.netsave(payRequest);
-
+		logger.info(JSON.toJSONString(resp));
 		Map<String, String> map = resp.getPostMap();
 
 		StringBuilder html = new StringBuilder(
@@ -76,7 +76,7 @@ public class AllinGatewayTest {
 	@Test
 	public void testQuery() {
 		try {
-			PayResponse resp = paymentService.recheck("1711240958560734832");
+			PayResponse resp = paymentService.recheck("1712271526510104358");
 			logger.info(JSON.toJSONString(resp));
 		} catch (Exception e) {
 			logger.error(" testPay PaymentException", e);

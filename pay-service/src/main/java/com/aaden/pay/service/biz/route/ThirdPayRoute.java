@@ -9,15 +9,16 @@ import com.aaden.pay.api.biz.vo.PayRequest;
 import com.aaden.pay.api.comm.enums.PayChannel;
 import com.aaden.pay.api.comm.enums.PayType;
 import com.aaden.pay.api.comm.model.ThirdPayRecord;
+import com.aaden.pay.core.contants.ErrorMsgConstant;
 import com.aaden.pay.core.utils.ClassUtil;
 import com.aaden.pay.core.utils.SpringContextHelper;
 import com.aaden.pay.service.biz.annotation.ChannelValue;
 import com.aaden.pay.service.biz.tp.ThirdPayService;
 
 /**
- *  @Description 第三方支付路由
- *  @author aaden
- *  @date 2017年12月27日
+ * @Description 第三方支付路由
+ * @author aaden
+ * @date 2017年12月27日
  */
 @Service
 public class ThirdPayRoute {
@@ -34,7 +35,7 @@ public class ThirdPayRoute {
 
 	public ThirdPayService route(PayChannel channel, PayType payType) throws Exception {
 		if (thirdClassList == null)
-			throw new Exception("当前暂不支持的第三方支付渠道");
+			throw new Exception(ErrorMsgConstant.CHANNEL_NOT_SUPPORT);
 
 		for (Class<?> clz : thirdClassList) {
 			ChannelValue comment = clz.getAnnotation(ChannelValue.class);
@@ -53,7 +54,7 @@ public class ThirdPayRoute {
 			return (ThirdPayService) SpringContextHelper.getBean(service.value());
 		}
 
-		throw new Exception("当前暂不支持的第三方支付渠道");
+		throw new Exception(ErrorMsgConstant.CHANNEL_NOT_SUPPORT);
 
 	}
 

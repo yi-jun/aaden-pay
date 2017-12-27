@@ -3,11 +3,12 @@ package com.aaden.pay.core.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
- *  @Description 集合工具类
- *  @author aaden
- *  @date 2017年12月10日
+ * @Description 集合工具类
+ * @author aaden
+ * @date 2017年12月10日
  */
 public class CollectionUtils {
 
@@ -23,6 +24,20 @@ public class CollectionUtils {
 	 */
 	public static boolean isNotEmpty(final Collection<?> coll) {
 		return !isEmpty(coll);
+	}
+
+	/**
+	 * 判断集合是否为空
+	 */
+	public static boolean isEmpty(final Map<?, ?> map) {
+		return map == null || map.isEmpty();
+	}
+
+	/**
+	 * 判断集合是否非空
+	 */
+	public static boolean isNotEmpty(final Map<?, ?> map) {
+		return !isEmpty(map);
 	}
 
 	/**

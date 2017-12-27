@@ -19,6 +19,7 @@
 		<property name="locations">
 			<list>
 				<value>classpath:properties/jdbc.properties</value>
+				<value>classpath:properties/dubbo.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -75,4 +76,8 @@
 	<bean id="myBatisDao" class="com.aaden.pay.core.orm.mybatis.MyBatisDaoImpl">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	
+	<!-- dubbo服务 -->
+	<import resource="classpath:spring/dubbo-pay-provider.xml" />
+	
 </beans>

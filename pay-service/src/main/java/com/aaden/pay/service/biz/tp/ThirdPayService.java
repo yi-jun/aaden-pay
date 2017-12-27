@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.aaden.pay.api.biz.vo.PayRequest;
+import com.aaden.pay.api.comm.enums.BankType;
 import com.aaden.pay.api.comm.model.ThirdPayRecord;
 import com.aaden.pay.api.comm.model.ThirdPayValidcode;
 import com.aaden.pay.service.biz.vo.ThirdPayResponse;
 
 /**
- *  @Description 第三方支付服务接口
- *  @author aaden
- *  @date 2017年12月29日
+ * @Description 第三方支付服务接口
+ * @author aaden
+ * @date 2017年12月29日
  */
 public interface ThirdPayService {
 
@@ -48,21 +49,25 @@ public interface ThirdPayService {
 	public List<ThirdPayResponse> queryTrade(Date checkDate);
 
 	/**
+	 * 发送充值验证码
+	 */
+	public ThirdPayResponse rechargeSmsCode(PayRequest payRequest, ThirdPayValidcode valid);
+
+	/**
+	 * 获取充值手续费费率, 用于充值路由,参考rechargeRoute.java
+	 */
+	public BigDecimal getRechargeFeeRate();
+
+	/**
 	 * 计算手续费
 	 */
 	public BigDecimal calculationCost(ThirdPayRecord tr);
 
 	/**
-	 * 发送充值验证码
+	 * 是否支持银行卡
 	 */
-	public ThirdPayResponse rechargeSmsCode(PayRequest payRequest, ThirdPayValidcode valid);
-	
-	
-	/**
-	 * 获取充值手续费费率, 用于充值路由,参考rechargeRoute.java
-	 */
-	public BigDecimal getRechargeFeeRate();
-	
+	public boolean supportBankType(BankType bankType);
+
 	/**
 	 * 退票
 	 */

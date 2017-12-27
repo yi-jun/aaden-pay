@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.aaden.pay.api.biz.enums.allinpay.AllinPayBankType;
 import com.aaden.pay.api.biz.vo.PayRequest;
 import com.aaden.pay.api.comm.enums.BankType;
 import com.aaden.pay.api.comm.enums.CardProp;
@@ -201,7 +202,8 @@ public class AllinPayAuthServiceImpl extends AbstractThirdPayService {
 	}
 
 	// ~~~~~~~~~~~~~~~批次处理~~~~~~~~~~~~~~//
-	private ThirdPayResponse batchTrade(String trx_code, String busicode, ThirdPayRecord payRecord, PayRequest payRequest) {
+	private ThirdPayResponse batchTrade(String trx_code, String busicode, ThirdPayRecord payRecord,
+			PayRequest payRequest) {
 		ThirdPayResponse trp = new ThirdPayResponse();
 		AipgRsp aipgrsp = this.adaptor.sendBatch(trx_code, busicode, payRecord, payRequest);
 
@@ -242,9 +244,15 @@ public class AllinPayAuthServiceImpl extends AbstractThirdPayService {
 		return feeRate;
 	}
 
+	@Override
+	public boolean supportBankType(BankType bankType) {
+		return AllinPayBankType.parse(bankType) != null;
+	}
+
 	private BigDecimal calculationAuth(BigDecimal amount) {
 		BigDecimal cost = amount.multiply(feeRate);
-		return cost.compareTo(BigDecimalUtils.TWO) <= 0 ? BigDecimalUtils.TWO : cost.setScale(2, BigDecimal.ROUND_HALF_UP);
+		return cost.compareTo(BigDecimalUtils.TWO) <= 0 ? BigDecimalUtils.TWO
+				: cost.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
 	private BigDecimal calculationPay(int size) {

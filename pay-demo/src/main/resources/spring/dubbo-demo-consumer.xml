@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+        default-lazy-init="false">
+
+
+	<!-- 消费者应用信息，用于计算依赖关系 -->
+	<dubbo:application name="${dubbo.application.name}" />
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" />
+	<!-- 用dubbo协议在20880端口暴露服务 -->
+	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" />
+	<!-- 关闭所有服务的启动时检查,也就是服务是否可以正常调用不影响本应用的启动 -->
+	<dubbo:consumer check="false" />
+
+
+	<!-- 数据库操作接口 -->
+	<dubbo:reference interface="com.aaden.pay.api.DbBankService" id="dbBankService" version="${dubbo.own.version}" />
+	<dubbo:reference interface="com.aaden.pay.api.DbPayService" id="dbPayService" version="${dubbo.own.version}" />
+	<!-- 支付业务接口 -->
+	<dubbo:reference interface="com.aaden.pay.api.BankService" id="bankService" version="${dubbo.own.version}" />
+	<dubbo:reference interface="com.aaden.pay.api.PaymentService" id="paymentService" version="${dubbo.own.version}" />
+	<dubbo:reference interface="com.aaden.pay.api.PayTaskService" id="payTaskService" version="${dubbo.own.version}" />
+</beans>
+
+
+

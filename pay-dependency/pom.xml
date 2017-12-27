@@ -57,6 +57,10 @@
 		<com.allinpay.java.sdk.version>1.0.aaden</com.allinpay.java.sdk.version>
 		<commons.httpclient.version>3.1</commons.httpclient.version>
 		<lucene.version>5.2.1</lucene.version>
+		<dubbo.version>2.5.3</dubbo.version>
+		<javassist.version>3.18.2-GA</javassist.version>
+		<zkclient.version>0.1</zkclient.version>
+		<zookeeper.version>3.4.9</zookeeper.version>
 	</properties>
 
 	<dependencyManagement>
@@ -296,7 +300,53 @@
 				<artifactId>pay-service</artifactId>
 				<version>${aaden.pay.version}</version>
 			</dependency>
+			<!-- zk,dubbo -->
+			<dependency>
+				<groupId>org.javassist</groupId>
+				<artifactId>javassist</artifactId>
+				<version>${javassist.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>dubbo</artifactId>
+				<version>${dubbo.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.javassist</groupId>
+						<artifactId>javassist</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>com.github.sgroschupf</groupId>
+				<artifactId>zkclient</artifactId>
+				<version>${zkclient.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.zookeeper</groupId>
+				<artifactId>zookeeper</artifactId>
+				<version>${zookeeper.version}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>jmxtools</artifactId>
+						<groupId>com.sun.jdmk</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>jmxri</artifactId>
+						<groupId>com.sun.jmx</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>jms</artifactId>
+						<groupId>javax.jms</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
 
+			<!-- zk,dubbo end -->
 		</dependencies>
 
 	</dependencyManagement>

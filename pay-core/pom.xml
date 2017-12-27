@@ -105,7 +105,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>base</finalName>
+		<finalName>pay-core</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
