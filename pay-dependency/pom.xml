@@ -28,7 +28,7 @@
 		<mysqldriver.version>5.1.25</mysqldriver.version>
 		<aaden.pay.version>0.0.1-SNAPSHOT</aaden.pay.version>
 		<fastjson.version>1.2.11</fastjson.version>
-		<commons.beanutils.version>1.8.3</commons.beanutils.version>
+		<commons.beanutils.version>1.9.2</commons.beanutils.version>
 		<commons.collections.version>4.1</commons.collections.version>
 		<commons.configuration.version>1.9</commons.configuration.version>
 		<commons.io.version>2.4</commons.io.version>
