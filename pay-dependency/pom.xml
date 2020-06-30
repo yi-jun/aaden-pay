@@ -42,7 +42,7 @@
 		<mybatis-spring.version>1.2.3</mybatis-spring.version>
 		<mybatis.version>3.2.8</mybatis.version>
 		<httpclient.version>4.3.5</httpclient.version>
-		<xstream.version>1.4.7</xstream.version>
+		<xstream.version>1.4.10-java7</xstream.version>
 		<poi-excelant.version>3.10-beta2</poi-excelant.version>
 		<druid.version>1.0.17</druid.version>
 		<jedis.version>2.9.0</jedis.version>
